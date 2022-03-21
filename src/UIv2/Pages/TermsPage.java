@@ -84,6 +84,7 @@ public class TermsPage implements KeyListener {
         textField.setPreferredSize(new Dimension(500, 50));
         textField.setOpaque(false);
         textField.setFont(new Font("Arial", Font.PLAIN, 30));
+        textField.setBorder(BorderFactory.createEtchedBorder());
         textField.addKeyListener(new TermsPage());
 
         // Increments scrollbar
@@ -116,12 +117,7 @@ public class TermsPage implements KeyListener {
 
         if (conditionsMet) {
             scroll.remove(textField);
-
-            int amount = 0;
-            for (Component comp:scroll.getComponents()) {
-                amount++;
-            }
-            SelectButton button = new SelectButton(amount+1+". "+textField.getText());
+            SelectButton button = new SelectButton(textField.getText());
             scroll.add(button);
         }
         finaliseScroll(scroll);

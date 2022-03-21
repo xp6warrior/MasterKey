@@ -14,7 +14,7 @@ public class SelectButton extends JButton implements MouseListener {
         this.setContentAreaFilled(false);
         this.setHorizontalAlignment(JButton.LEFT);
         this.setFont(new Font("Arial", Font.PLAIN, 30));
-        this.setBorder(null);
+        this.setBorder(BorderFactory.createLineBorder(Color.gray, 1, false));
         this.addMouseListener(this);
     }
 
@@ -24,7 +24,7 @@ public class SelectButton extends JButton implements MouseListener {
         if (selected) {
             this.setBorder(BorderFactory.createLineBorder(Color.black, 3, false));
         } else {
-            this.setBorder(BorderFactory.createLineBorder(Color.gray, 1, false));
+            this.setBorder(BorderFactory.createLineBorder(Color.gray, 2, false));
         }
     }
 
@@ -41,14 +41,14 @@ public class SelectButton extends JButton implements MouseListener {
     @Override
     public void mouseEntered(MouseEvent e) {
         if (!selected) {
-            this.setBorder(BorderFactory.createLineBorder(Color.gray, 1, false));
+            this.setBorder(BorderFactory.createLineBorder(Color.gray, 2, false));
         }
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
         if (!selected) {
-            this.setBorder(null);
+            this.setBorder(BorderFactory.createLineBorder(Color.gray, 1, false));
         }
     }
 }
