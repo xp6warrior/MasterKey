@@ -27,10 +27,10 @@ public class Frame extends JFrame {
         clearPage();
 
         switch (page) {
-            case MENU -> MenuPage.create(this);
-            case PASS -> PassPage.create(this);
-            case TERMS -> TermsPage.create(this);
-            case VIEW -> ViewPage.create(this);
+            case MENU:MenuPage.create(this);
+            case PASS:PassPage.create(this);
+            case TERMS:TermsPage.create(this);
+            case VIEW:ViewPage.create(this);
         }
 
         finalisePage();
