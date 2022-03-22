@@ -4,6 +4,11 @@ import UIv2.Pages.*;
 import javax.swing.*;
 
 public class Frame extends JFrame {
+    private final MenuPage menu = new MenuPage();
+    private final PassPage pass = new PassPage();
+    private final TermsPage terms = new TermsPage();
+    private final ViewPage view = new ViewPage();
+
     public Frame() {
         this.setSize(600, 600);
         this.setTitle("Password Generator");
@@ -14,25 +19,17 @@ public class Frame extends JFrame {
         setPage(PagesEnum.MENU);
     }
 
-    void clearPage() {
-        this.getContentPane().removeAll();
-    }
-
-    void finalisePage() {
-        this.revalidate();
-        this.repaint();
-    }
-
     public void setPage(PagesEnum page) {
-        clearPage();
+        this.getContentPane().removeAll();
 
         switch (page) {
-            case MENU:MenuPage.create(this);
-            case PASS:PassPage.create(this);
-            case TERMS:TermsPage.create(this);
-            case VIEW:ViewPage.create(this);
+            case MENU: menu.create(this);
+            case PASS: pass.create(this);
+            case TERMS: terms.create(this);
+            case VIEW: view.create(this);
         }
 
-        finalisePage();
+        this.revalidate();
+        this.repaint();
     }
 }

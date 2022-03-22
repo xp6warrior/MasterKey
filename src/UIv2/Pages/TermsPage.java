@@ -1,19 +1,18 @@
 package UIv2.Pages;
 
-import Objects.SelectButton;
-import Objects.Term;
+import Objects.TermField;
 import UIv2.Frame;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
-public class TermsPage implements KeyListener {
-    static int scrollYSize; // for incrementing scrollbar
+public class TermsPage implements IPages{
+    private int scrollHeight;
 
-    public static void create(Frame frame) {
+    @Override
+    public void create(Frame frame) {
         JPanel bottomPanel = new JPanel();
+        scrollHeight = 0;
 
         // Components
         JLabel title = new JLabel("Modify Key Terms");
@@ -27,8 +26,8 @@ public class TermsPage implements KeyListener {
 
         // Buttons
         back.addActionListener(e -> frame.setPage(PagesEnum.MENU));
-        add.addActionListener(e -> TermsPage.addTerm(scroll));
-        remove.addActionListener(e -> TermsPage.removeTerm(scroll));
+        add.addActionListener(e -> this.add(scroll));
+        remove.addActionListener(e -> this.remove(scroll));
 
         // Sizes
         title.setPreferredSize(new Dimension(600, 150));
@@ -47,7 +46,7 @@ public class TermsPage implements KeyListener {
         scrollPane.getViewport().setOpaque(false);
         scrollPane.setOpaque(false);
         scroll.setOpaque(false);
-        scroll.setLayout(new FlowLayout(FlowLayout.LEADING, 10, 16));
+        scroll.setLayout(new FlowLayout(FlowLayout.LEADING, 10, 12));
 
         // Fonts
         title.setFont(new Font("Arial", Font.BOLD, 50));
@@ -72,88 +71,31 @@ public class TermsPage implements KeyListener {
         frame.getContentPane().add(BorderLayout.SOUTH, bottomPanel);
     }
 
-    static void addTerm(JPanel scroll) {
-        // Removes incomplete JTextFields
-        for (Component comp:scroll.getComponents()) {
+    @Override
+    public void add(JPanel panel) {
+        for (Component comp: panel.getComponents()) { // Makes sure only one TextField at a time
             if (comp instanceof JTextField) {
-                scroll.remove(comp);
+                panel.remove(comp);
             }
         }
+        TermField termField = new TermField(panel);
 
-        JTextField textField = new JTextField("Press ENTER to confirm");
-        textField.setPreferredSize(new Dimension(500, 50));
-        textField.setOpaque(false);
-        textField.setFont(new Font("Arial", Font.PLAIN, 30));
-        textField.setBorder(BorderFactory.createEtchedBorder());
-        textField.addKeyListener(new TermsPage());
-
-        // Increments scrollbar
-        scrollYSize+=66;
-        scroll.setPreferredSize(new Dimension(500, scrollYSize));
-
-        scroll.add(textField);
-        finaliseScroll(scroll);
-    }
-
-    static void validateTerm(JTextField textField) {
-        // Replaces JTextField with JButton/checks for 18-character limit/only letters
-
-        JPanel scroll = (JPanel) textField.getParent();
-        boolean conditionsMet = true;
-
-        if (textField.getText().length() <= 16) {
-            for (char c:textField.getText().toCharArray()) {
-                if(!Character.isLetter(c)) {
-                    textField.setText("Must only include letters!...");
-                    conditionsMet = false;
-                    break;
-                }
-            }
-
-        } else {
-            textField.setText("Must not exceed 16 characters!...");
-            conditionsMet = false;
-        }
-
-        if (conditionsMet) {
-            scroll.remove(textField);
-            SelectButton button = new SelectButton(textField.getText());
-            scroll.add(button);
-        }
-        finaliseScroll(scroll);
-    }
-
-    static void removeTerm(JPanel scroll) {
-        // Removes selected terms
-        for (Component comp:scroll.getComponents()) {
-            if (comp instanceof SelectButton && ((SelectButton) comp).selected) {
-                scroll.remove(comp);
-            }
-        }
-
-        // Decrements scrollbar
-        scrollYSize-=66;
-        scroll.setPreferredSize(new Dimension(500, scrollYSize));
-
-        finaliseScroll(scroll);
-    }
-
-    static void finaliseScroll(JPanel scroll) {
-        scroll.revalidate();
-        scroll.repaint();
-    }
-
-
-    @Override
-    public void keyTyped(KeyEvent e) {}
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == 10) {
-            validateTerm((JTextField) e.getComponent());
-        }
+        scrollHeight+=65;
+        panel.setPreferredSize(new Dimension(550, scrollHeight));
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {}
+    public void remove(JPanel panel) {
+        for (Component comp: panel.getComponents()) {
+            if (comp instanceof TermField && ((TermField) comp).selected) {
+                panel.remove(comp);
+                panel.revalidate();
+                panel.repaint();
+
+                scrollHeight-=64;
+                panel.setPreferredSize(new Dimension(550, scrollHeight));
+            }
+        }
+    }
+
 }
