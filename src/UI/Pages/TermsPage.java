@@ -1,7 +1,7 @@
-package UIv2.Pages;
+package UI.Pages;
 
 import Objects.TermField;
-import UIv2.Frame;
+import UI.Frame;
 
 import javax.swing.*;
 import java.awt.*;

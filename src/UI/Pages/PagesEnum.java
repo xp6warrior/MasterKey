@@ -1,8 +1,8 @@
-package UIv2.Pages;
+package UI.Pages;
 
 public enum PagesEnum {
     MENU,
     PASS,
     TERMS,
-    VIEW;
+    VIEW
 }

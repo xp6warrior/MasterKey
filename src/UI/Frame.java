@@ -1,6 +1,6 @@
-package UIv2;
+package UI;
 
-import UIv2.Pages.*;
+import UI.Pages.*;
 import javax.swing.*;
 
 public class Frame extends JFrame {
