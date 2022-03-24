@@ -9,10 +9,11 @@ import java.awt.event.MouseListener;
 
 public class TermField extends JButton implements MouseListener, KeyListener {
     public boolean selected;
+    public String name;
     private final JPanel panel;
     private final JTextField textField;
 
-    public TermField(JPanel panel) {
+    public TermField(JPanel panel, boolean withTextField, String name) {
         this.panel = panel;
 
         textField = new JTextField("Press ENTER to confirm");
@@ -25,9 +26,15 @@ public class TermField extends JButton implements MouseListener, KeyListener {
         panel.add(textField);
         panel.revalidate();
         panel.repaint();
+
+        if (!withTextField) {
+            textField.setText(name);
+            finaliseTerm();
+        }
     }
 
-    private void FinaliseTerm() {
+
+    private void finaliseTerm() {
         if (textField.getText().length() <= 16) {
             boolean hasSymbols = false;
 
@@ -51,6 +58,7 @@ public class TermField extends JButton implements MouseListener, KeyListener {
                 panel.add(this);
                 panel.revalidate();
                 panel.repaint();
+                name = this.getText();
             } else {
                 textField.setText("Letters only!...");
             }
@@ -104,7 +112,7 @@ public class TermField extends JButton implements MouseListener, KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode()==10) {
-            FinaliseTerm();
+            finaliseTerm();
         }
     }
 

@@ -5,9 +5,7 @@ import UI.Frame;
 import javax.swing.*;
 import java.awt.*;
 
-public class MenuPage implements IPages{
-
-    @Override
+public class MenuPage {
     public void create(Frame frame) {
         // Components
         JLabel title = new JLabel("Password Generator");
@@ -43,15 +41,4 @@ public class MenuPage implements IPages{
         frame.getContentPane().add(termsButton);
         frame.getContentPane().add(viewButton);
     }
-
-    @Override
-    public void add(JPanel panel) {
-
-    }
-
-    @Override
-    public void remove(JPanel panel) {
-
-    }
-
 }

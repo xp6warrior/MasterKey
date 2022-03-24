@@ -23,10 +23,10 @@ public class Frame extends JFrame {
         this.getContentPane().removeAll();
 
         switch (page) {
-            case MENU: menu.create(this);
-            case PASS: pass.create(this);
-            case TERMS: terms.create(this);
-            case VIEW: view.create(this);
+            case MENU: menu.create(this); break;
+            case PASS: pass.create(this); break;
+            case TERMS: terms.create(this); break;
+            case VIEW: view.create(this); break;
         }
 
         this.revalidate();

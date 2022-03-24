@@ -5,9 +5,7 @@ import UI.Frame;
 import javax.swing.*;
 import java.awt.*;
 
-public class PassPage implements IPages{
-
-    @Override
+public class PassPage {
     public void create(Frame frame) {
         JPanel bottomPanel = new JPanel();
 
@@ -63,15 +61,4 @@ public class PassPage implements IPages{
         frame.getContentPane().add(refresh);
         frame.getContentPane().add(BorderLayout.SOUTH, bottomPanel);
     }
-
-    @Override
-    public void add(JPanel panel) {
-
-    }
-
-    @Override
-    public void remove(JPanel panel) {
-
-    }
-
 }
