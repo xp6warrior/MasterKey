@@ -1,48 +1,72 @@
 package Core;
 
+import Objects.Term;
+
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class ModTerms {
-    public void saveToTerms(ArrayList<String> terms) {
+    private static final ArrayList<Term> terms = new ArrayList<>();
+
+    public static void addTerm(Term term) {
+        terms.add(term);
+    }
+
+    public static void removeTerm(String name) {
+        Term termToRemove;
+        for (Term term: terms) {
+            if (term.getName().equals(name)) {
+                termToRemove = term;
+                terms.remove(termToRemove);
+                break;
+            }
+        }
+    }
+
+    public static void saveToTerms() {
+        // Saves term to Terms.txt (first line is ignored to save code in algorithm)
         try {
             FileWriter writer = new FileWriter("Terms.txt");
 
-            for (String term: terms) {
-                writer.append(term);
-
-                if (terms.size()!=terms.indexOf(term)+1) {
-                    writer.append("\n");
-                }
+            for (Term term: terms) {
+                writer.write("\n"+term.getName());
             }
+
             writer.close();
+            terms.clear();
         } catch (IOException ignore) {}
     }
 
-    public ArrayList<String> loadToTerms() {
-        ArrayList<String> terms = new ArrayList<>();
+    public static ArrayList<Term> loadFromTerms() {
+        ArrayList<Term> termsToLoad = new ArrayList<>();
 
         try {
             FileReader reader = new FileReader("Terms.txt");
-            StringBuilder term = new StringBuilder();
+            StringBuilder name = new StringBuilder();
+            boolean firstLineSkipped = false;
 
             int data = reader.read();
-            while (data!=-1) {
-                if (data!=10) {
-                    term.append((char)data);
-                } else {
-                    terms.add(term.toString());
-                    term = new StringBuilder();
-                }
 
+            while (data!=-1) {
+                if (data!=10) { // If character is not ENTER -> add char to name
+                    name.append((char)data);
+                } else if (firstLineSkipped) { // If char is ENTER + first line was skipped -> finish name create term
+                    termsToLoad.add(new Term(name.toString()));
+                    name = new StringBuilder();
+                } else { // If char is ENTER + is first line -> skip
+                    firstLineSkipped = true;
+                }
                 data = reader.read();
             }
-            terms.add(term.toString());
-            reader.close();
+
+            // For adding last term
+            if (firstLineSkipped) {
+                termsToLoad.add(new Term(name.toString()));
+            }
 
         } catch (IOException ignore) {}
-        return terms;
+        return termsToLoad;
     }
 }

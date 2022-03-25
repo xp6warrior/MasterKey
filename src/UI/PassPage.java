@@ -1,24 +1,34 @@
-package UI.Pages;
+package UI;
 
-import UI.Frame;
+import Core.ModPass;
+import Core.ModTerms;
+import Objects.Password;
+import Objects.Term;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Random;
 
-public class PassPage {
-    public void create(Frame frame) {
+class PassPage {
+    private ArrayList<Term> terms;
+    private final Random random = new Random();
+
+    void create(Frame frame) {
         JPanel bottomPanel = new JPanel();
 
         // Components
         JLabel title = new JLabel("Create Password");
         JTextField inputTitle = new JTextField("Input title");
-        JLabel outputPass = new JLabel("Output");
+        JLabel outputPass = new JLabel();
         JButton refresh = new JButton("R");
         JButton confirm = new JButton("Confirm");
         JButton back = new JButton("Back");
 
         // Buttons
-        back.addActionListener(e -> frame.setPage(PagesEnum.MENU));
+        back.addActionListener(e -> {frame.setPage(PagesEnum.MENU);ModPass.saveToPasswords();});
+        refresh.addActionListener(e -> generate(outputPass));
+        confirm.addActionListener(e -> confirm(outputPass, inputTitle));
 
         // Sizes
         title.setPreferredSize(new Dimension(600, 150));
@@ -60,5 +70,33 @@ public class PassPage {
         frame.getContentPane().add(outputPass);
         frame.getContentPane().add(refresh);
         frame.getContentPane().add(BorderLayout.SOUTH, bottomPanel);
+
+        // Loads all the terms
+        terms = ModTerms.loadFromTerms();
+    }
+
+    private void generate(JLabel label) {
+        // Creates a password, makes sure that there are terms
+        if (!terms.isEmpty()) {
+            String term = terms.get(random.nextInt(terms.size())).getName();
+            label.setText(term);
+        } else {
+            label.setText("Create terms first!...");
+        }
+    }
+
+    private void confirm(JLabel output, JTextField title) {
+        String outputString = output.getText();
+
+        if (title.getText().equals("")) { // If title is blank -> requires title
+            output.setText("Requires title!...");
+        } else if (outputString.equals("") || outputString.equals("Create terms first!...") ||
+                outputString.equals("Requires title!...") ||
+                outputString.equals("Generate a password!...")) // If output is blank/message displayed in output -> generate a password
+        {
+            output.setText("Generate a password!...");
+        } else {
+            ModPass.addPass(new Password(outputString, title.getText()));
+        }
     }
 }

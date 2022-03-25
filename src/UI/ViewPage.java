@@ -1,12 +1,10 @@
-package UI.Pages;
-
-import UI.Frame;
+package UI;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class ViewPage {
-    public void create(Frame frame) {
+class ViewPage {
+    void create(Frame frame) {
         JPanel bottomPanel = new JPanel();
 
         // Components

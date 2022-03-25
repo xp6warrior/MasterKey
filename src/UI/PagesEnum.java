@@ -1,6 +1,6 @@
-package UI.Pages;
+package UI;
 
-public enum PagesEnum {
+enum PagesEnum {
     MENU,
     PASS,
     TERMS,

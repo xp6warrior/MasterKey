@@ -1,19 +1,17 @@
-package UI.Pages;
+package UI;
 
 import Core.ModTerms;
+import Objects.Term;
 import Objects.TermField;
-import UI.Frame;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
 import java.util.ArrayList;
 
-public class TermsPage {
+class TermsPage {
     private int scrollHeight = 0;
-    private final ModTerms modTerms = new ModTerms();
 
-    public void create(Frame frame) {
+    void create(Frame frame) {
         JPanel bottomPanel = new JPanel();
 
         // Components
@@ -27,7 +25,7 @@ public class TermsPage {
         JScrollPane scrollPane = new JScrollPane(scroll, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         // Buttons
-        back.addActionListener(e -> {frame.setPage(PagesEnum.MENU);this.save(scroll);scrollHeight=0;});
+        back.addActionListener(e -> {frame.setPage(PagesEnum.MENU);ModTerms.saveToTerms();scrollHeight=0;});
         add.addActionListener(e -> this.add(scroll));
         remove.addActionListener(e -> this.remove(scroll));
 
@@ -76,47 +74,43 @@ public class TermsPage {
     }
 
     private void add(JPanel panel) {
+        scrollHeight+=65;
         for (Component comp: panel.getComponents()) { // Makes sure only one TextField at a time
             if (comp instanceof JTextField) {
                 panel.remove(comp);
+                scrollHeight-=65;
             }
         }
-        TermField termField = new TermField(panel, true, null);
-
-        scrollHeight+=65;
+        new TermField(panel, "");
         panel.setPreferredSize(new Dimension(550, scrollHeight));
     }
 
     private void remove(JPanel panel) {
         for (Component comp: panel.getComponents()) {
-            if (comp instanceof TermField && ((TermField) comp).selected) {
+            TermField termField = (TermField)comp;
+
+            if (termField.getSelected()) {
                 panel.remove(comp);
                 panel.revalidate();
                 panel.repaint();
 
                 scrollHeight-=64;
                 panel.setPreferredSize(new Dimension(550, scrollHeight));
-            }
-        }
-    }
 
-    private void save(JPanel panel) {
-        ArrayList<String> terms = new ArrayList<>();
-        for (Component comp: panel.getComponents()) {
-            if (comp instanceof TermField) {
-                terms.add(((TermField) comp).name);
+                ModTerms.removeTerm(termField.getText());
             }
         }
-        modTerms.saveToTerms(terms);
     }
 
     private void load(JPanel panel) {
-        ArrayList<String> terms = modTerms.loadToTerms();
+        ArrayList<Term> terms = ModTerms.loadFromTerms();
 
-        for (String t: terms) {
-            TermField term = new TermField(panel, false, t);
-            scrollHeight+=65;
-            panel.setPreferredSize(new Dimension(500, scrollHeight));
+        if (!terms.isEmpty()) {
+            for (Term term: terms) {
+                scrollHeight+=65;
+                new TermField(panel, term.getName());
+                panel.setPreferredSize(new Dimension(550, scrollHeight));
+            }
         }
     }
 }

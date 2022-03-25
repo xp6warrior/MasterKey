@@ -1,12 +1,10 @@
-package UI.Pages;
-
-import UI.Frame;
+package UI;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class MenuPage {
-    public void create(Frame frame) {
+class MenuPage {
+    void create(Frame frame) {
         // Components
         JLabel title = new JLabel("Password Generator");
         JButton newButton = new JButton("Create new password");
