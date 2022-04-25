@@ -9,7 +9,11 @@ public class Password {
         this.title = title;
     }
 
-    public String[] getInfo() {
-        return new String[]{title, pass};
+    public String getTitle() {
+        return title;
+    }
+
+    public String getPass() {
+        return pass;
     }
 }

@@ -1,8 +1,9 @@
 package UI;
 
 import Core.ModTerms;
+import Objects.Fields.Field;
+import Objects.Fields.TermField;
 import Objects.Term;
-import Objects.TermField;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,7 +26,7 @@ class TermsPage {
         JScrollPane scrollPane = new JScrollPane(scroll, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         // Buttons
-        back.addActionListener(e -> {frame.setPage(PagesEnum.MENU);ModTerms.saveToTerms();scrollHeight=0;});
+        back.addActionListener(e -> {frame.setPage(PageType.MENU);ModTerms.saveToTerms();scrollHeight=0;});
         add.addActionListener(e -> this.add(scroll));
         remove.addActionListener(e -> this.remove(scroll));
 
@@ -81,15 +82,15 @@ class TermsPage {
                 scrollHeight-=65;
             }
         }
-        new TermField(panel, "");
+        new TermField(panel);
         panel.setPreferredSize(new Dimension(550, scrollHeight));
     }
 
     private void remove(JPanel panel) {
         for (Component comp: panel.getComponents()) {
-            TermField termField = (TermField)comp;
+            Field field = (Field)comp;
 
-            if (termField.getSelected()) {
+            if (field.getSelected()) {
                 panel.remove(comp);
                 panel.revalidate();
                 panel.repaint();
@@ -97,7 +98,7 @@ class TermsPage {
                 scrollHeight-=64;
                 panel.setPreferredSize(new Dimension(550, scrollHeight));
 
-                ModTerms.removeTerm(termField.getText());
+                ModTerms.removeTerm(field.getText());
             }
         }
     }
@@ -108,7 +109,8 @@ class TermsPage {
         if (!terms.isEmpty()) {
             for (Term term: terms) {
                 scrollHeight+=65;
-                new TermField(panel, term.getName());
+                panel.add(new Field(term.getName()));
+                ModTerms.addTerm(term);
                 panel.setPreferredSize(new Dimension(550, scrollHeight));
             }
         }

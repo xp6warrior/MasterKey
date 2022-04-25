@@ -2,6 +2,7 @@ package UI;
 
 import Core.ModPass;
 import Core.ModTerms;
+import Objects.Fields.PassField;
 import Objects.Password;
 import Objects.Term;
 
@@ -26,7 +27,7 @@ class PassPage {
         JButton back = new JButton("Back");
 
         // Buttons
-        back.addActionListener(e -> {frame.setPage(PagesEnum.MENU);ModPass.saveToPasswords();});
+        back.addActionListener(e -> {frame.setPage(PageType.MENU);ModPass.saveToPasswords();});
         refresh.addActionListener(e -> generate(outputPass));
         confirm.addActionListener(e -> confirm(outputPass, inputTitle));
 
@@ -73,6 +74,7 @@ class PassPage {
 
         // Loads all the terms
         terms = ModTerms.loadFromTerms();
+        load();
     }
 
     private void generate(JLabel label) {
@@ -97,6 +99,16 @@ class PassPage {
             output.setText("Generate a password!...");
         } else {
             ModPass.addPass(new Password(outputString, title.getText()));
+        }
+    }
+
+    private void load() {
+        ArrayList<Password> passwords = ModPass.loadFromPasswords();
+
+        if (!passwords.isEmpty()) {
+            for (Password pass: passwords) {
+                ModPass.addPass(pass);
+            }
         }
     }
 }

@@ -12,9 +12,9 @@ class MenuPage {
         JButton viewButton = new JButton("View passwords");
 
         // Buttons
-        newButton.addActionListener(e -> frame.setPage(PagesEnum.PASS));
-        termsButton.addActionListener(e -> frame.setPage(PagesEnum.TERMS));
-        viewButton.addActionListener(e -> frame.setPage(PagesEnum.VIEW));
+        newButton.addActionListener(e -> frame.setPage(PageType.PASS));
+        termsButton.addActionListener(e -> frame.setPage(PageType.TERMS));
+        viewButton.addActionListener(e -> frame.setPage(PageType.VIEW));
 
         // Text/font
         title.setHorizontalAlignment(SwingConstants.CENTER);

@@ -15,10 +15,10 @@ public class Frame extends JFrame {
         this.setResizable(false);
         this.setVisible(true);
 
-        setPage(PagesEnum.MENU);
+        setPage(PageType.MENU);
     }
 
-    public void setPage(PagesEnum page) {
+    public void setPage(PageType page) {
         this.getContentPane().removeAll();
 
         switch (page) {

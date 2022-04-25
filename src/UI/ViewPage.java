@@ -1,9 +1,19 @@
 package UI;
 
+import Core.ModPass;
+import Core.ModTerms;
+import Objects.Fields.Field;
+import Objects.Fields.PassField;
+import Objects.Password;
+import Objects.Term;
+
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 class ViewPage {
+    private int scrollHeight = 0;
+
     void create(Frame frame) {
         JPanel bottomPanel = new JPanel();
 
@@ -17,7 +27,8 @@ class ViewPage {
         JScrollPane scrollPane = new JScrollPane(scroll, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         // Buttons
-        back.addActionListener(e -> frame.setPage(PagesEnum.MENU));
+        back.addActionListener(e -> {frame.setPage(PageType.MENU);scrollHeight=0;ModPass.saveToPasswords();});
+        remove.addActionListener(e -> this.remove(scroll));
 
         // Sizes
         title.setPreferredSize(new Dimension(600, 150));
@@ -35,7 +46,7 @@ class ViewPage {
         scrollPane.getViewport().setOpaque(false);
         scrollPane.setOpaque(false);
         scroll.setOpaque(false);
-        scroll.setLayout(new FlowLayout(FlowLayout.LEADING, 10, 20));
+        scroll.setLayout(new FlowLayout(FlowLayout.LEADING, 10, 12));
 
         // Fonts
         title.setFont(new Font("Arial", Font.BOLD, 50));
@@ -56,5 +67,37 @@ class ViewPage {
         frame.getContentPane().add(title);
         frame.getContentPane().add(viewPanel);
         frame.getContentPane().add(BorderLayout.SOUTH, bottomPanel);
+
+        load(scroll);
+    }
+
+    private void remove(JPanel panel) {
+        for (Component comp: panel.getComponents()) {
+            if (((Field) comp).getSelected()) {
+                Field field = (Field)comp;
+
+                panel.remove(comp);
+                panel.revalidate();
+                panel.repaint();
+
+                scrollHeight-=64;
+                panel.setPreferredSize(new Dimension(550, scrollHeight));
+
+                ModPass.removePass(field.getText());
+            }
+        }
+    }
+
+    private void load(JPanel panel) {
+        ArrayList<Password> passwords = ModPass.loadFromPasswords();
+
+        if (!passwords.isEmpty()) {
+            for (Password pass: passwords) {
+                scrollHeight+=65;
+                panel.add(new PassField(pass));
+                ModPass.addPass(pass);
+                panel.setPreferredSize(new Dimension(550, scrollHeight));
+            }
+        }
     }
 }

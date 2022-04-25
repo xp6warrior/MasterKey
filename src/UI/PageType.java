@@ -1,6 +1,6 @@
 package UI;
 
-enum PagesEnum {
+enum PageType {
     MENU,
     PASS,
     TERMS,

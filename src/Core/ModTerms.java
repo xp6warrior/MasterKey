@@ -7,7 +7,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class ModTerms {
+public abstract class ModTerms {
     private static final ArrayList<Term> terms = new ArrayList<>();
 
     public static void addTerm(Term term) {
@@ -15,11 +15,9 @@ public class ModTerms {
     }
 
     public static void removeTerm(String name) {
-        Term termToRemove;
         for (Term term: terms) {
             if (term.getName().equals(name)) {
-                termToRemove = term;
-                terms.remove(termToRemove);
+                terms.remove(term);
                 break;
             }
         }
