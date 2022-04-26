@@ -28,20 +28,28 @@ public class TermField extends Field implements KeyListener {
     private void finaliseTerm() {
         boolean conditionsMet = true;
         String name = "";
+
         if (textField.getText().length() <= 16) { // If less than 16 characters -> continue
 
-            boolean hasSymbols = false;
-            for (char c: textField.getText().toCharArray()) {
-                if (!Character.isLetter(c)) {
-                    hasSymbols = true;
-                    break;
+            if (textField.getText().length() >= 3) { // If more than 3 characters -> continue
+
+                boolean hasSymbols = false;
+                for (char c: textField.getText().toCharArray()) {
+                    if (!Character.isLetter(c)) {
+                        hasSymbols = true;
+                        break;
+                    }
                 }
-            }
-            if (!hasSymbols) { // If it doesn't have symbols -> register name/remove textfield
-                name = textField.getText().toLowerCase();
-                panel.remove(textField);
+                if (!hasSymbols) { // If it doesn't have symbols -> register name/remove textfield
+                    name = textField.getText().toLowerCase();
+                    panel.remove(textField);
+                } else {
+                    textField.setText("Letters only!...");
+                    conditionsMet = false;
+                }
+
             } else {
-                textField.setText("Letters only!...");
+                textField.setText("Min 3 characters!...");
                 conditionsMet = false;
             }
 

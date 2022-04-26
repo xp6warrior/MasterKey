@@ -2,13 +2,13 @@ package UI;
 
 import javax.swing.*;
 
-public class Frame extends JFrame {
+class Frame extends JFrame {
     private final MenuPage menu = new MenuPage();
     private final PassPage pass = new PassPage();
     private final TermsPage terms = new TermsPage();
     private final ViewPage view = new ViewPage();
 
-    public Frame() {
+    Frame() {
         this.setSize(600, 600);
         this.setTitle("Password Generator");
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -18,7 +18,7 @@ public class Frame extends JFrame {
         setPage(PageType.MENU);
     }
 
-    public void setPage(PageType page) {
+    void setPage(PageType page) {
         this.getContentPane().removeAll();
 
         switch (page) {
@@ -30,5 +30,9 @@ public class Frame extends JFrame {
 
         this.revalidate();
         this.repaint();
+    }
+
+    public static void main(String[] args) {
+        new Frame();
     }
 }

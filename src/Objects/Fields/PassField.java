@@ -1,6 +1,5 @@
 package Objects.Fields;
 
-import Core.ModPass;
 import Objects.Password;
 
 import javax.swing.*;
