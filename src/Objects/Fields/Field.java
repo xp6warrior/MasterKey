@@ -1,8 +1,5 @@
 package Objects.Fields;
 
-import Core.ModTerms;
-import Objects.Term;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -20,10 +17,6 @@ public class Field extends JButton implements MouseListener {
         createField();
     }
 
-    public boolean getSelected() {
-        return selected;
-    }
-
     private void createField() {
         this.setPreferredSize(new Dimension(500, 50));
         this.setBorder(BorderFactory.createLineBorder(Color.gray, 1, false));
@@ -31,6 +24,10 @@ public class Field extends JButton implements MouseListener {
         this.setHorizontalAlignment(JButton.LEFT);
         this.setContentAreaFilled(false);
         this.addMouseListener(this);
+    }
+
+    public boolean getSelected() {
+        return selected;
     }
 
     @Override

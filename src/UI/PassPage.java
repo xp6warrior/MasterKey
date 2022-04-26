@@ -1,8 +1,6 @@
 package UI;
 
-import Core.ModPass;
-import Core.ModTerms;
-import Objects.Fields.PassField;
+import Core.MUserData;
 import Objects.Password;
 import Objects.Term;
 
@@ -11,9 +9,9 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
 
-class PassPage {
+class PassPage extends MUserData {
     private ArrayList<Term> terms;
-    private final Random random = new Random();
+    private static final Random random = new Random();
 
     void create(Frame frame) {
         JPanel bottomPanel = new JPanel();
@@ -21,15 +19,18 @@ class PassPage {
         // Components
         JLabel title = new JLabel("Create Password");
         JTextField inputTitle = new JTextField("Input title");
-        JLabel outputPass = new JLabel();
+        JLabel outputPass = new JLabel(".....");
         JButton refresh = new JButton("R");
         JButton confirm = new JButton("Confirm");
         JButton back = new JButton("Back");
 
         // Buttons
-        back.addActionListener(e -> {frame.setPage(PageType.MENU);ModPass.saveToPasswords();});
+        back.addActionListener(e -> {
+            frame.setPage(PageType.MENU);
+            saveToPasswords();
+        });
         refresh.addActionListener(e -> generate(outputPass));
-        confirm.addActionListener(e -> confirm(outputPass, inputTitle));
+        confirm.addActionListener(e -> confirm(inputTitle, outputPass));
 
         // Sizes
         title.setPreferredSize(new Dimension(600, 150));
@@ -53,8 +54,8 @@ class PassPage {
 
         // Fonts
         title.setFont(new Font("Arial", Font.BOLD, 60));
-        inputTitle.setFont(new Font("Arial", Font.PLAIN, 40));
-        outputPass.setFont(smallFont);
+        inputTitle.setFont(new Font("Arial", Font.ITALIC, 45));
+        outputPass.setFont(new Font("Arial", Font.ITALIC, 35));
         refresh.setFont(smallFont);
         confirm.setFont(smallFont);
         back.setFont(smallFont);
@@ -72,43 +73,46 @@ class PassPage {
         frame.getContentPane().add(refresh);
         frame.getContentPane().add(BorderLayout.SOUTH, bottomPanel);
 
-        // Loads all the terms
-        terms = ModTerms.loadFromTerms();
-        load();
+        // Loads all the terms / passwords
+        terms = loadFromTerms();
+        for (Password password: loadFromPasswords()) {
+            addPassword(password);
+        }
     }
 
-    private void generate(JLabel label) {
-        // Creates a password, makes sure that there are terms
+    private void generate(JLabel outputPass) { // Creates a password, makes sure that there are terms -- WIP ADD RANDOMIZATION
         if (!terms.isEmpty()) {
+
             String term = terms.get(random.nextInt(terms.size())).getName();
-            label.setText(term);
+            outputPass.setText(term);
+
         } else {
-            label.setText("Create terms first!...");
+            outputPass.setText("Create terms first!...");
         }
     }
 
-    private void confirm(JLabel output, JTextField title) {
-        String outputString = output.getText();
+    private void confirm(JTextField inputTitle, JLabel outputPass) { // Confirms the password
+        boolean conditionsMet = true;
+        String in = inputTitle.getText();
+        String out = outputPass.getText();
 
-        if (title.getText().equals("")) { // If title is blank -> requires title
-            output.setText("Requires title!...");
-        } else if (outputString.equals("") || outputString.equals("Create terms first!...") ||
-                outputString.equals("Requires title!...") ||
-                outputString.equals("Generate a password!...")) // If output is blank/message displayed in output -> generate a password
-        {
-            output.setText("Generate a password!...");
-        } else {
-            ModPass.addPass(new Password(outputString, title.getText()));
+        if (out.equals("") || out.equals("Requires password!...") || out.equals(".....")) {
+            outputPass.setText("Requires password!...");
+            conditionsMet = false;
         }
-    }
 
-    private void load() {
-        ArrayList<Password> passwords = ModPass.loadFromPasswords();
+        if (in.length() > 16) { // No need for String check, since "Must be..." is more that 16 characters
+            inputTitle.setText("Must be < 16 characters");
+            conditionsMet = false;
+        }
 
-        if (!passwords.isEmpty()) {
-            for (Password pass: passwords) {
-                ModPass.addPass(pass);
-            }
+        if (in.equals("") || in.equals("Requires title!...")) {
+            inputTitle.setText("Requires title!...");
+            conditionsMet = false;
+        }
+
+        if (conditionsMet) {
+            addPassword(new Password(in, out));
         }
     }
 }

@@ -1,17 +1,15 @@
 package UI;
 
-import Core.ModPass;
-import Core.ModTerms;
+import Core.MUserData;
 import Objects.Fields.Field;
 import Objects.Fields.PassField;
 import Objects.Password;
-import Objects.Term;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-class ViewPage {
+class ViewPage extends MUserData {
     private int scrollHeight = 0;
 
     void create(Frame frame) {
@@ -29,7 +27,11 @@ class ViewPage {
 
         // Buttons
         //rename.addActionListener(e -> );
-        back.addActionListener(e -> {frame.setPage(PageType.MENU);scrollHeight=0;ModPass.saveToPasswords();});
+        back.addActionListener(e -> {
+            frame.setPage(PageType.MENU);
+            saveToPasswords();
+            scrollHeight = 0;
+        });
         remove.addActionListener(e -> this.remove(scroll));
 
         // Sizes
@@ -73,35 +75,29 @@ class ViewPage {
         frame.getContentPane().add(viewPanel);
         frame.getContentPane().add(BorderLayout.SOUTH, bottomPanel);
 
-        load(scroll);
-    }
-
-    private void remove(JPanel panel) {
-        for (Component comp: panel.getComponents()) {
-            if (((Field) comp).getSelected()) {
-                Field field = (Field)comp;
-
-                panel.remove(comp);
-                panel.revalidate();
-                panel.repaint();
-
-                scrollHeight-=64;
-                panel.setPreferredSize(new Dimension(550, scrollHeight));
-
-                ModPass.removePass(field.getText());
-            }
+        // Loading passwords
+        for (Password password: loadFromPasswords()) {
+            scroll.add(new PassField(password));
+            addPassword(password);
+            scrollHeight += 65;
+            scroll.setPreferredSize(new Dimension(550, scrollHeight));
         }
     }
 
-    private void load(JPanel panel) {
-        ArrayList<Password> passwords = ModPass.loadFromPasswords();
+    private void remove(JPanel scroll) { // Removing password
+        for (Component comp: scroll.getComponents()) {
+            if (((Field) comp).getSelected()) {
+                Field field = (Field)comp;
 
-        if (!passwords.isEmpty()) {
-            for (Password pass: passwords) {
-                scrollHeight+=65;
-                panel.add(new PassField(pass));
-                ModPass.addPass(pass);
-                panel.setPreferredSize(new Dimension(550, scrollHeight));
+                if (field.getSelected()) {
+                    scroll.remove(comp);
+                    scroll.revalidate();
+                    scroll.repaint();
+                    scrollHeight -= 64;
+                    scroll.setPreferredSize(new Dimension(550, scrollHeight));
+
+                    removePassword(field.getText());
+                }
             }
         }
     }

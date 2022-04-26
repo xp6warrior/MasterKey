@@ -4,9 +4,9 @@ public class Password {
     private final String title;
     private final String pass;
 
-    public Password(String pass, String title) {
-        this.pass = pass;
+    public Password(String title, String pass) {
         this.title = title;
+        this.pass = pass;
     }
 
     public String getTitle() {

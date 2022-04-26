@@ -12,6 +12,7 @@ class Frame extends JFrame {
         this.setSize(600, 600);
         this.setTitle("Password Generator");
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.setVisible(true);
 
