@@ -82,12 +82,8 @@ class PassPage extends MUserData {
 
     private void generate(JLabel outputPass) { // Creates a password, makes sure that there are terms -- WIP ADD RANDOMIZATION
         if (!terms.isEmpty()) {
-
             String term = terms.get(random.nextInt(terms.size())).getName();
             outputPass.setText(term);
-
-        } else {
-            outputPass.setText("Create terms first!...");
         }
     }
 

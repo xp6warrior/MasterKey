@@ -1,9 +1,11 @@
 package UI;
 
+import Core.MUserData;
+
 import javax.swing.*;
 import java.awt.*;
 
-class MenuPage {
+class MenuPage extends MUserData {
     void create(Frame frame) {
         // Components
         JLabel title = new JLabel("Password Generator");
@@ -12,7 +14,14 @@ class MenuPage {
         JButton viewButton = new JButton("View passwords");
 
         // Buttons
-        newButton.addActionListener(e -> frame.setPage(PageType.PASS));
+        newButton.addActionListener(e -> {
+            if (!loadFromTerms().isEmpty()) {
+                frame.setPage(PageType.PASS);
+            } else {
+                newButton.setFont(new Font("Arial", Font.ITALIC, 35));
+                newButton.setText("Create terms first!!");
+            }
+        });
         termsButton.addActionListener(e -> frame.setPage(PageType.TERMS));
         viewButton.addActionListener(e -> frame.setPage(PageType.VIEW));
 

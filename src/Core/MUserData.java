@@ -59,7 +59,7 @@ public abstract class MUserData {
                     if (tempTitle.equals("")) {
                         tempTitle = name.toString();
                     } else {
-                        passwordsToLoad.add(new Password(name.toString(), tempTitle));
+                        passwordsToLoad.add(new Password(tempTitle, name.toString()));
                         tempTitle = "";
                     }
                     name = new StringBuilder();
@@ -121,9 +121,6 @@ public abstract class MUserData {
                     name.append((char)data);
                 } else if (firstLineSkipped) { // If char is ENTER + first line was skipped -> finish name create term
                     termsToLoad.add(new Term(name.toString()));
-
-                    System.out.println(name);
-
                     name = new StringBuilder();
                 } else { // If char is ENTER + is first line -> skip
                     firstLineSkipped = true;

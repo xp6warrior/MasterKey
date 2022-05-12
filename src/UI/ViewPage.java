@@ -18,7 +18,6 @@ class ViewPage extends MUserData {
         // Components
         JLabel title = new JLabel("View Passwords");
         JPanel viewPanel = new JPanel();
-        JButton rename = new JButton("Rename");
         JButton remove = new JButton("Remove");
         JButton back = new JButton("Back");
 
@@ -26,19 +25,17 @@ class ViewPage extends MUserData {
         JScrollPane scrollPane = new JScrollPane(scroll, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         // Buttons
-        //rename.addActionListener(e -> );
         back.addActionListener(e -> {
             frame.setPage(PageType.MENU);
             saveToPasswords();
             scrollHeight = 0;
         });
-        remove.addActionListener(e -> this.remove(scroll));
+        remove.addActionListener(e -> remove(scroll));
 
         // Sizes
         title.setPreferredSize(new Dimension(600, 150));
         viewPanel.setPreferredSize(new Dimension(550, 270));
-        rename.setPreferredSize(new Dimension(170, 60));
-        remove.setPreferredSize(new Dimension(170, 60));
+        remove.setPreferredSize(new Dimension(365, 60));
         back.setPreferredSize(new Dimension(170, 60));
         scroll.setPreferredSize(new Dimension(520, 0));
         scrollPane.setPreferredSize(new Dimension(538, 258));
@@ -55,13 +52,11 @@ class ViewPage extends MUserData {
 
         // Fonts
         title.setFont(new Font("Arial", Font.BOLD, 50));
-        rename.setFont(smallFont);
         remove.setFont(smallFont);
         back.setFont(smallFont);
 
         // BottomPanel components
         bottomPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
-        bottomPanel.add(rename);
         bottomPanel.add(remove);
         bottomPanel.add(back);
 
