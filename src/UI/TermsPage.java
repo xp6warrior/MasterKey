@@ -98,7 +98,7 @@ class TermsPage extends MUserData {
 
     private void remove(JPanel scroll) { // Removes term
         for (Component comp: scroll.getComponents()) {
-            if (((Field) comp).getSelected()) {
+            if (comp instanceof Field && ((Field) comp).getSelected()) {
                 Field field = (Field)comp;
 
                 if (field.getSelected()) {

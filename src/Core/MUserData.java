@@ -25,7 +25,7 @@ public abstract class MUserData {
         }
     }
 
-    protected static void saveToPasswords() {
+    protected static void saveToPasswords() { // WIP
         // Saves title in one line, password in the next in Passwords.txt (first line is ignored to save code in algorithm)
         try {
             FileWriter writer = new FileWriter("Passwords.txt");
