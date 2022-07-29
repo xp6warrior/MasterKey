@@ -1,116 +1,118 @@
 package UI;
 
 import Core.MUserData;
-import Objects.Fields.Field;
-import Objects.Fields.TermField;
+import Core.ToolBox;
+import Fields.Field;
+import Fields.TermField;
 import Objects.Term;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
-class TermsPage extends MUserData {
-    private int scrollHeight = 0;
+public class TermsPage {
+    private int scrollPanelHeight = 0;
 
     void create(Frame frame) {
-        JPanel bottomPanel = new JPanel();
-
         // Components
         JLabel title = new JLabel("Modify Terms");
-        JPanel viewPanel = new JPanel();
         JButton add = new JButton("Add");
         JButton remove = new JButton("Remove");
         JButton back = new JButton("Back");
+        JPanel viewPanel = new JPanel();
+        JPanel scrollPanel = new JPanel();
+        JScrollPane scrollPane = new JScrollPane(scrollPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        JPanel bottomPanel = new JPanel();
 
-        JPanel scroll = new JPanel();
-        JScrollPane scrollPane = new JScrollPane(scroll, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        // Removes blue highlight when clicking
+        add.setFocusable(false);
+        remove.setFocusable(false);
+        back.setFocusable(false);
 
         // Buttons
-        back.addActionListener(e -> {
-            frame.setPage(PageType.MENU);
-            saveToTerms();
-            scrollHeight = 0;
-        });
-        add.addActionListener(e -> this.add(scroll));
-        remove.addActionListener(e -> this.remove(scroll));
+        back.addActionListener(e -> backButtonFunction(frame));
+        add.addActionListener(e -> this.add(scrollPanel));
+        remove.addActionListener(e -> this.remove(scrollPanel));
 
         // Sizes
-        title.setPreferredSize(new Dimension(600, 150));
-        viewPanel.setPreferredSize(new Dimension(550, 270));
-        add.setPreferredSize(new Dimension(170, 60));
-        remove.setPreferredSize(new Dimension(170, 60));
-        back.setPreferredSize(new Dimension(170, 60));
-        scroll.setPreferredSize(new Dimension(550, 0));
-        scrollPane.setPreferredSize(new Dimension(540, 260));
+        title.setPreferredSize(ToolBox.titleSize);
+        viewPanel.setPreferredSize(ToolBox.viewPanelSize);
+        scrollPanel.setPreferredSize(ToolBox.scrollPanelSize);
+        scrollPane.setPreferredSize(ToolBox.scrollPaneSize);
+        add.setPreferredSize(ToolBox.termButtonSize);
+        remove.setPreferredSize(ToolBox.termButtonSize);
+        back.setPreferredSize(ToolBox.termButtonSize);
 
-        // Text/fonts/borders/colors
-        Font smallFont = new Font("Arial", Font.PLAIN, 35);
+        // Alignment / Color / Border
         title.setHorizontalAlignment(SwingConstants.CENTER);
-        viewPanel.setBorder(BorderFactory.createLineBorder(Color.black, 6, true));
+        viewPanel.setBorder(ToolBox.blackBorder6);
         viewPanel.setBackground(Color.lightGray);
+        scrollPanel.setLayout(new FlowLayout(FlowLayout.LEADING, 10, 12));
         scrollPane.getViewport().setOpaque(false);
         scrollPane.setOpaque(false);
-        scroll.setOpaque(false);
-        scroll.setLayout(new FlowLayout(FlowLayout.LEADING, 10, 12));
+        scrollPanel.setOpaque(false);
 
         // Fonts
-        title.setFont(new Font("Arial", Font.BOLD, 50));
-        add.setFont(smallFont);
-        remove.setFont(smallFont);
-        back.setFont(smallFont);
+        title.setFont(ToolBox.font_50);
+        add.setFont(ToolBox.font_35);
+        remove.setFont(ToolBox.font_35);
+        back.setFont(ToolBox.font_35);
 
         // BottomPanel components
-        bottomPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        bottomPanel.setLayout(ToolBox.bottomPanelLayout);
         bottomPanel.add(add);
         bottomPanel.add(remove);
         bottomPanel.add(back);
 
         // ViewPanel components
-        viewPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        viewPanel.setLayout(ToolBox.viewPanelLayout);
         viewPanel.add(scrollPane);
 
         // Frame components
-        frame.getContentPane().setLayout(new FlowLayout(FlowLayout.CENTER, 20, 15));
+        frame.getContentPane().setLayout(ToolBox.frameLayout);
         frame.getContentPane().add(title);
         frame.getContentPane().add(viewPanel);
         frame.getContentPane().add(BorderLayout.SOUTH, bottomPanel);
 
         // Load terms
-        for (Term term: loadFromTerms()) {
-            scrollHeight += 65;
-            scroll.setPreferredSize(new Dimension(550, scrollHeight));
-            scroll.add(new Field(term.getName()));
-            addTerm(term);
+        for (Term term: MUserData.loadFromTerms()) {
+            scrollPanelHeight += 65;
+            scrollPanel.setPreferredSize(new Dimension(550, scrollPanelHeight));
+            scrollPanel.add(new Field(term.getName()));
+            MUserData.addTerm(term);
         }
     }
+    private void backButtonFunction(Frame frame) {
+        frame.setPage(PageType.MENU);
+        MUserData.saveToTerms();
+        scrollPanelHeight = 0;
+    }
 
-    private void add(JPanel scroll) { // Adds a term
-        for (Component comp: scroll.getComponents()) { // Makes sure only one TextField at a time
+    // Adds a TermField to the ScrollPanel
+    private void add(JPanel scroll) {
+        // Makes sure only one TextField at a time
+        for (Component comp: scroll.getComponents()) {
             if (comp instanceof JTextField) {
                 scroll.remove(comp);
-                scrollHeight -= 65;
+                scrollPanelHeight -= 65;
             }
         }
-        scrollHeight += 65;
-        scroll.setPreferredSize(new Dimension(550, scrollHeight));
 
-        new TermField(scroll); // Gets added by itself
+        scrollPanelHeight += 65;
+        scroll.setPreferredSize(new Dimension(550, scrollPanelHeight));
+
+        new TermField(scroll);
     }
 
-    private void remove(JPanel scroll) { // Removes term
-        for (Component comp: scroll.getComponents()) {
-            if (comp instanceof Field && ((Field) comp).getSelected()) {
-                Field field = (Field)comp;
+    // Removes TermField's from the ScrollPanel and removes the term from MUserData
+    @SuppressWarnings("all")
+    private void remove(JPanel scroll) {
+        Object[] results = ToolBox.removeFieldFromList(scroll, scrollPanelHeight);
+        ArrayList<String> terms = (ArrayList<String>) results[0];
+        scrollPanelHeight = (int) results[1];
 
-                if (field.getSelected()) {
-                    scroll.remove(field);
-                    scroll.revalidate();
-                    scroll.repaint();
-                    scrollHeight -= 64;
-                    scroll.setPreferredSize(new Dimension(550, scrollHeight));
-
-                    removeTerm(field.getText());
-                }
-            }
+        for (String term: terms) {
+            MUserData.removeTerm(term);
         }
     }
 }

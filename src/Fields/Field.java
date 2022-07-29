@@ -1,7 +1,8 @@
-package Objects.Fields;
+package Fields;
+
+import Core.ToolBox;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -18,12 +19,13 @@ public class Field extends JButton implements MouseListener {
     }
 
     private void createField() {
-        this.setPreferredSize(new Dimension(500, 50));
-        this.setBorder(BorderFactory.createLineBorder(Color.gray, 1, false));
-        this.setFont(new Font("Arial", Font.PLAIN, 30));
+        this.setPreferredSize(ToolBox.fieldSize);
+        this.setBorder(ToolBox.blackBorder1);
+        this.setFont(ToolBox.font_30);
         this.setHorizontalAlignment(JButton.LEFT);
         this.setContentAreaFilled(false);
         this.addMouseListener(this);
+        this.setFocusable(false);
     }
 
     public boolean getSelected() {
@@ -34,23 +36,23 @@ public class Field extends JButton implements MouseListener {
     public void mouseClicked(MouseEvent e) {
         selected = !selected;
         if (selected) {
-            this.setBorder(BorderFactory.createLineBorder(Color.black, 3, false));
+            this.setBorder(ToolBox.blackBorder3);
         } else {
-            this.setBorder(BorderFactory.createLineBorder(Color.gray, 2, false));
+            this.setBorder(ToolBox.blackBorder2);
         }
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
         if (!selected) {
-            this.setBorder(BorderFactory.createLineBorder(Color.gray, 2, false));
+            this.setBorder(ToolBox.blackBorder2);
         }
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
         if (!selected) {
-            this.setBorder(BorderFactory.createLineBorder(Color.gray, 1, false));
+            this.setBorder(ToolBox.blackBorder1);
         }
     }
 

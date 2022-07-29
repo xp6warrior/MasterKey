@@ -1,99 +1,95 @@
 package UI;
 
 import Core.MUserData;
-import Objects.Fields.Field;
-import Objects.Fields.PassField;
+import Core.ToolBox;
+import Fields.PassField;
 import Objects.Password;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-class ViewPage extends MUserData {
-    private int scrollHeight = 0;
+public class ViewPage {
+    private int scrollPanelHeight = 0;
 
     void create(Frame frame) {
-        JPanel bottomPanel = new JPanel();
-
         // Components
         JLabel title = new JLabel("View Passwords");
         JPanel viewPanel = new JPanel();
         JButton remove = new JButton("Remove");
         JButton back = new JButton("Back");
+        JPanel scrollPanel = new JPanel();
+        JScrollPane scrollPane = new JScrollPane(scrollPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        JPanel bottomPanel = new JPanel();
 
-        JPanel scroll = new JPanel();
-        JScrollPane scrollPane = new JScrollPane(scroll, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        // Removes blue highlight when clicking
+        remove.setFocusable(false);
+        back.setFocusable(false);
 
         // Buttons
-        back.addActionListener(e -> {
-            frame.setPage(PageType.MENU);
-            saveToPasswords();
-            scrollHeight = 0;
-        });
-        remove.addActionListener(e -> remove(scroll));
+        back.addActionListener(e -> backButtonFunction(frame));
+        remove.addActionListener(e -> remove(scrollPanel));
 
         // Sizes
-        title.setPreferredSize(new Dimension(600, 150));
-        viewPanel.setPreferredSize(new Dimension(550, 270));
-        remove.setPreferredSize(new Dimension(365, 60));
-        back.setPreferredSize(new Dimension(170, 60));
-        scroll.setPreferredSize(new Dimension(520, 0));
-        scrollPane.setPreferredSize(new Dimension(538, 258));
+        title.setPreferredSize(ToolBox.titleSize);
+        viewPanel.setPreferredSize(ToolBox.viewPanelSize);
+        scrollPanel.setPreferredSize(ToolBox.scrollPanelSize);
+        scrollPane.setPreferredSize(ToolBox.scrollPaneSize);
+        back.setPreferredSize(ToolBox.termButtonSize);
+        remove.setPreferredSize(ToolBox.removeSize);
 
-        // Fonts/text/color/border
-        Font smallFont = new Font("Arial", Font.PLAIN, 35);
+        // Alignment / Color / Border
         title.setHorizontalAlignment(SwingConstants.CENTER);
-        viewPanel.setBorder(BorderFactory.createLineBorder(Color.black, 6, true));
+        viewPanel.setBorder(ToolBox.blackBorder6);
         viewPanel.setBackground(Color.lightGray);
+        scrollPanel.setLayout(new FlowLayout(FlowLayout.LEADING, 10, 12));
         scrollPane.getViewport().setOpaque(false);
         scrollPane.setOpaque(false);
-        scroll.setOpaque(false);
-        scroll.setLayout(new FlowLayout(FlowLayout.LEADING, 10, 12));
+        scrollPanel.setOpaque(false);
 
         // Fonts
-        title.setFont(new Font("Arial", Font.BOLD, 50));
-        remove.setFont(smallFont);
-        back.setFont(smallFont);
+        title.setFont(ToolBox.font_50);
+        remove.setFont(ToolBox.font_35);
+        back.setFont(ToolBox.font_35);
 
         // BottomPanel components
-        bottomPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        bottomPanel.setLayout(ToolBox.bottomPanelLayout);
         bottomPanel.add(remove);
         bottomPanel.add(back);
 
         // ViewPanel components
-        viewPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        viewPanel.setLayout(ToolBox.viewPanelLayout);
         viewPanel.add(scrollPane);
 
         // Frame components
-        frame.getContentPane().setLayout(new FlowLayout(FlowLayout.CENTER, 20, 15));
+        frame.getContentPane().setLayout(ToolBox.frameLayout);
         frame.getContentPane().add(title);
         frame.getContentPane().add(viewPanel);
         frame.getContentPane().add(BorderLayout.SOUTH, bottomPanel);
 
-        // Loading passwords
-        for (Password password: loadFromPasswords()) {
-            scroll.add(new PassField(password));
-            addPassword(password);
-            scrollHeight += 65;
-            scroll.setPreferredSize(new Dimension(550, scrollHeight));
+        // Load passwords
+        for (Password password: MUserData.loadFromPasswords()) {
+            scrollPanelHeight += 65;
+            scrollPanel.setPreferredSize(new Dimension(550, scrollPanelHeight));
+            scrollPanel.add(new PassField(password));
+            MUserData.addPassword(password);
         }
     }
+    private void backButtonFunction(Frame frame) {
+        frame.setPage(PageType.MENU);
+        MUserData.saveToPasswords();
+        scrollPanelHeight = 0;
+    }
 
+    // Removes PassField's from the ScrollPanel and removes the password from MUserData
+    @SuppressWarnings("all")
     private void remove(JPanel scroll) { // Removing password
-        for (Component comp: scroll.getComponents()) {
-            if (((Field) comp).getSelected()) {
-                Field field = (Field)comp;
+        Object[] results = ToolBox.removeFieldFromList(scroll, scrollPanelHeight);
+        ArrayList<String> passwords = (ArrayList<String>) results[0];
+        scrollPanelHeight = (int) results[1];
 
-                if (field.getSelected()) {
-                    scroll.remove(comp);
-                    scroll.revalidate();
-                    scroll.repaint();
-                    scrollHeight -= 64;
-                    scroll.setPreferredSize(new Dimension(550, scrollHeight));
-
-                    removePassword(field.getText());
-                }
-            }
+        for (String password: passwords) {
+            MUserData.removePassword(password);
         }
     }
 }

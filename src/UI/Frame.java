@@ -2,13 +2,13 @@ package UI;
 
 import javax.swing.*;
 
-class Frame extends JFrame {
+public class Frame extends JFrame {
     private final MenuPage menu = new MenuPage();
     private final PassPage pass = new PassPage();
     private final TermsPage terms = new TermsPage();
     private final ViewPage view = new ViewPage();
 
-    Frame() {
+    public Frame() {
         this.setSize(600, 600);
         this.setTitle("Password Generator");
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

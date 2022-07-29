@@ -1,6 +1,5 @@
 # Project exclude paths
 /out/
 /.idea/
-Password.iml
-Terms.txt
-Passwords.txt
+/res/*
+*.iml

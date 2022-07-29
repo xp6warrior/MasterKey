@@ -2,116 +2,148 @@ package UI;
 
 import Core.MUserData;
 import Core.RandomPassword;
+import Core.ToolBox;
 import Objects.Password;
-import Objects.Term;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Random;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
-class PassPage extends MUserData {
-    private ArrayList<Term> terms;
-    private static final Random random = new Random();
+public class PassPage implements MouseListener {
+    private JTextField inputTitle;
+    private JLabel outputPass;
 
     void create(Frame frame) {
-        JPanel bottomPanel = new JPanel();
-
         // Components
         JLabel title = new JLabel("Create Password");
-        JTextField inputTitle = new JTextField("Input title");
-        JLabel outputPass = new JLabel(".....");
+        inputTitle = new JTextField("Input title...");
+        outputPass = new JLabel(".....");
         JButton refresh = new JButton("R");
         JButton confirm = new JButton("Confirm");
         JButton back = new JButton("Back");
+        JPanel bottomPanel = new JPanel();
+
+        // Removes blue highlight when clicking
+        refresh.setFocusable(false);
+        confirm.setFocusable(false);
+        back.setFocusable(false);
 
         // Buttons
-        back.addActionListener(e -> {
-            frame.setPage(PageType.MENU);
-            saveToPasswords();
-        });
+        back.addActionListener(e -> backButtonFunction(frame));
         refresh.addActionListener(e -> generate(outputPass));
         confirm.addActionListener(e -> confirm(inputTitle, outputPass));
+        inputTitle.addMouseListener(this);
 
         // Sizes
-        title.setPreferredSize(new Dimension(600, 150));
-        inputTitle.setPreferredSize(new Dimension(550, 110));
-        outputPass.setPreferredSize(new Dimension(420, 110));
-        refresh.setPreferredSize(new Dimension(110, 110));
-        confirm.setPreferredSize(new Dimension(350, 70));
-        back.setPreferredSize(new Dimension(180, 70));
+        title.setPreferredSize(ToolBox.titleSize);
+        inputTitle.setPreferredSize(ToolBox.menuButtonSize);
+        outputPass.setPreferredSize(ToolBox.outputPassSize);
+        refresh.setPreferredSize(ToolBox.refreshSize);
+        confirm.setPreferredSize(ToolBox.confirmSize);
+        back.setPreferredSize(ToolBox.backSize);
 
-        // Text/fonts/borders/colors
-        Font smallFont = new Font("Arial", Font.PLAIN, 35);
+        // Alignment / Color / Border
         title.setHorizontalAlignment(SwingConstants.CENTER);
         inputTitle.setHorizontalAlignment(SwingConstants.CENTER);
         outputPass.setHorizontalAlignment(SwingConstants.CENTER);
-        inputTitle.setBorder(BorderFactory.createLineBorder(Color.black, 6, true));
+        inputTitle.setBorder(ToolBox.blackBorder6);
         outputPass.setBorder(BorderFactory.createLineBorder(Color.black, 5, true));
         inputTitle.setBackground(Color.lightGray);
         outputPass.setBackground(Color.lightGray);
-        inputTitle.setOpaque(true);
+        inputTitle.setForeground(Color.gray);
         outputPass.setOpaque(true);
 
         // Fonts
-        title.setFont(new Font("Arial", Font.BOLD, 60));
-        inputTitle.setFont(new Font("Arial", Font.ITALIC, 45));
-        outputPass.setFont(new Font("Arial", Font.ITALIC, 35));
-        refresh.setFont(smallFont);
-        confirm.setFont(smallFont);
-        back.setFont(smallFont);
+        title.setFont(ToolBox.font_50);
+        inputTitle.setFont(ToolBox.italic_45);
+        outputPass.setFont(ToolBox.italic_35);
+        refresh.setFont(ToolBox.font_35);
+        confirm.setFont(ToolBox.font_35);
+        back.setFont(ToolBox.font_35);
 
         // BottomPanel components
-        bottomPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 25));
+        bottomPanel.setLayout(ToolBox.passPageBottomPanelLayout);
         bottomPanel.add(confirm);
         bottomPanel.add(back);
 
         // Frame components
-        frame.getContentPane().setLayout(new FlowLayout(FlowLayout.CENTER, 20, 15));
+        frame.getContentPane().setLayout(ToolBox.frameLayout);
         frame.getContentPane().add(title);
         frame.getContentPane().add(inputTitle);
         frame.getContentPane().add(outputPass);
         frame.getContentPane().add(refresh);
         frame.getContentPane().add(BorderLayout.SOUTH, bottomPanel);
 
-        // Loads all the terms / passwords
-        terms = loadFromTerms();
-        for (Password password: loadFromPasswords()) {
-            addPassword(password);
+        // Load passwords
+        for (Password password: MUserData.loadFromPasswords()) {
+            MUserData.addPassword(password);
         }
     }
-
-    private void generate(JLabel outputPass) { // Creates a password, makes sure that there are terms -- WIP ADD RANDOMIZATION
-        if (!terms.isEmpty()) {
-            Term randomTerm = terms.get(random.nextInt(terms.size()));
-            String randomPassword = RandomPassword.createRandomPassword(randomTerm);
-
-            outputPass.setText(randomPassword);
-        }
+    private void backButtonFunction(Frame frame) {
+        frame.setPage(PageType.MENU);
+        MUserData.saveToPasswords();
     }
 
-    private void confirm(JTextField inputTitle, JLabel outputPass) { // Confirms the password
+
+    // Creates a random password
+    private void generate(JLabel outputPass) {
+        String randomPassword = RandomPassword.createRandomPassword();
+        outputPass.setText(randomPassword);
+        outputPass.setForeground(Color.darkGray);
+    }
+
+    // Confirms the password
+    private void confirm(JTextField inputTitle, JLabel outputPass) {
         boolean conditionsMet = true;
-        String in = inputTitle.getText();
-        String out = outputPass.getText();
+        String input = inputTitle.getText();
+        String output = outputPass.getText();
 
-        if (out.equals("") || out.equals("Requires password!...") || out.equals(".....")) {
+        if (output.equals("Requires password!...") || output.equals(".....")) {
             outputPass.setText("Requires password!...");
+            outputPass.setForeground(Color.gray);
             conditionsMet = false;
         }
 
-        if (in.length() > 16) { // No need for String check, since "Must be..." is more that 16 characters
-            inputTitle.setText("Must be < 16 characters");
-            conditionsMet = false;
-        }
-
-        if (in.equals("") || in.equals("Requires title!...")) {
+        if (input.equals("") || input.equals("Requires title!...") || input.equals("Input title...")) {
             inputTitle.setText("Requires title!...");
+            inputTitle.setForeground(Color.gray);
+            inputTitle.setFont(ToolBox.italic_45);
             conditionsMet = false;
         }
 
         if (conditionsMet) {
-            addPassword(new Password(in, out));
+            MUserData.addPassword(new Password(input, output));
         }
+    }
+
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        if (inputTitle.getText().equals("Input title...") || inputTitle.getText().equals("Requires title!...")) {
+            inputTitle.setText("");
+            inputTitle.setForeground(Color.darkGray);
+            inputTitle.setFont(ToolBox.font_45);
+        }
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
     }
 }

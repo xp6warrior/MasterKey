@@ -3,87 +3,30 @@ package Core;
 import Objects.Password;
 import Objects.Term;
 
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public abstract class MUserData {
     private static final ArrayList<Password> passwords = new ArrayList<>();
     private static final ArrayList<Term> terms = new ArrayList<>();
 
-    protected static void addPassword(Password password) {
+    public static void addPassword(Password password) {
         passwords.add(password);
     }
-
-    protected static void removePassword(String name) {
+    public static void removePassword(String term) {
         for (Password pass: passwords) {
-            if (pass.getPass().equals(name)) {
+            if (pass.getPass().equals(term) || term == null) {
                 passwords.remove(pass);
                 break;
             }
         }
     }
 
-    protected static void saveToPasswords() { // WIP
-        // Saves title in one line, password in the next in Passwords.txt (first line is ignored to save code in algorithm)
-        try {
-            FileWriter writer = new FileWriter("Passwords.txt");
-
-            for (Password password: passwords) {
-                String title = password.getTitle();
-                String pass = password.getPass();
-                writer.write("\n"+title+"\n"+pass);
-            }
-
-            writer.close();
-            passwords.clear();
-        } catch (IOException ignore) {}
-    }
-
-    protected static ArrayList<Password> loadFromPasswords() {
-        ArrayList<Password> passwordsToLoad = new ArrayList<>();
-        String tempTitle = "";
-
-        try {
-            FileReader reader = new FileReader("Passwords.txt");
-            StringBuilder name = new StringBuilder();
-            boolean firstLineSkipped = false;
-
-            int data = reader.read();
-
-            while (data!=-1) {
-                if (data!=10) { // If character is not ENTER -> add char to name
-                    name.append((char)data);
-                } else if (firstLineSkipped) { // If char is ENTER + first line was skipped -> finish name create pass
-                    if (tempTitle.equals("")) {
-                        tempTitle = name.toString();
-                    } else {
-                        passwordsToLoad.add(new Password(tempTitle, name.toString()));
-                        tempTitle = "";
-                    }
-                    name = new StringBuilder();
-                } else { // If char is ENTER + is first line -> skip
-                    firstLineSkipped = true;
-                }
-                data = reader.read();
-            }
-
-            // For adding last pass
-            if (firstLineSkipped) {
-                passwordsToLoad.add(new Password(tempTitle, name.toString()));
-            }
-
-        } catch (IOException ignore) {}
-        return passwordsToLoad;
-    }
-
-
-    protected static void addTerm(Term term) {
+    public static void addTerm(Term term) {
         terms.add(term);
     }
-
-    protected static void removeTerm(String name) {
+    public static void removeTerm(String name) {
         for (Term term: terms) {
             if (term.getName().equals(name)) {
                 terms.remove(term);
@@ -92,48 +35,70 @@ public abstract class MUserData {
         }
     }
 
-    protected static void saveToTerms() {
-        // Saves term to Terms.txt (first line is ignored to save code in algorithm)
-        try {
-            FileWriter writer = new FileWriter("Terms.txt");
 
-            for (Term term: terms) {
-                writer.write("\n"+term.getName());
+    public static void saveToPasswords() {
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter("res/Passwords.txt"));
+
+            for (Password password: passwords) {
+                String title = password.getTitle();
+                String pass = password.getPass();
+                bw.write(title + "\n" + pass + "\n");
             }
 
-            writer.close();
+            bw.close();
+            passwords.clear();
+
+        } catch (IOException ignore) {}
+    }
+    public static void saveToTerms() {
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter("res/Terms.txt"));
+
+            for (Term term: terms) {
+                bw.write(term.getName()+"\n");
+            }
+
+            bw.close();
             terms.clear();
+
         } catch (IOException ignore) {}
     }
 
-    protected static ArrayList<Term> loadFromTerms() {
+    public static ArrayList<Password> loadFromPasswords() {
+        ArrayList<Password> passwordsToLoad = new ArrayList<>();
+
+        try {
+            BufferedReader br = new BufferedReader(new FileReader("res/Passwords.txt"));
+
+            String title = br.readLine();
+            String pass = br.readLine();
+            while (title != null) {
+                passwordsToLoad.add(new Password(title, pass));
+                title = br.readLine();
+                pass = br.readLine();
+            }
+            br.close();
+
+        } catch (IOException ignored) {}
+
+        return passwordsToLoad;
+    }
+    public static ArrayList<Term> loadFromTerms() {
         ArrayList<Term> termsToLoad = new ArrayList<>();
 
         try {
-            FileReader reader = new FileReader("Terms.txt");
-            StringBuilder name = new StringBuilder();
-            boolean firstLineSkipped = false;
+            BufferedReader br = new BufferedReader(new FileReader("res/Terms.txt"));
 
-            int data = reader.read();
-
-            while (data!=-1) {
-                if (data!=10) { // If character is not ENTER -> add char to name
-                    name.append((char)data);
-                } else if (firstLineSkipped) { // If char is ENTER + first line was skipped -> finish name create term
-                    termsToLoad.add(new Term(name.toString()));
-                    name = new StringBuilder();
-                } else { // If char is ENTER + is first line -> skip
-                    firstLineSkipped = true;
-                }
-                data = reader.read();
+            String line = br.readLine();
+            while (line != null) {
+                termsToLoad.add(new Term(line));
+                line = br.readLine();
             }
-
-            // For adding last term
-            if (firstLineSkipped) {
-                termsToLoad.add(new Term(name.toString()));
-            }
+            br.close();
 
         } catch (IOException ignore) {}
+
         return termsToLoad;
     }
 }
