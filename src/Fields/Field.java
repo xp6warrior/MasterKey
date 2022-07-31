@@ -7,14 +7,12 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 public class Field extends JButton implements MouseListener {
-    private boolean selected = false;
-
-    public Field() {
-        createField();
-    }
+    public boolean selected = false;
+    public String displayText;
 
     public Field(String name) {
-        this.setText(name);
+        this.displayText = name;
+        this.setText(" "+name+" ");
         createField();
     }
 
@@ -26,10 +24,6 @@ public class Field extends JButton implements MouseListener {
         this.setContentAreaFilled(false);
         this.addMouseListener(this);
         this.setFocusable(false);
-    }
-
-    public boolean getSelected() {
-        return selected;
     }
 
     @Override

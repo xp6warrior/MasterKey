@@ -5,7 +5,6 @@ import Objects.Term;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Objects;
 
 public abstract class MUserData {
     private static final ArrayList<Password> passwords = new ArrayList<>();

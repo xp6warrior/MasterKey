@@ -24,8 +24,8 @@ public abstract class ToolBox {
     public static final Dimension passSize = new Dimension(250, 40);
 
     public static final Border blackBorder6 = BorderFactory.createLineBorder(Color.black, 6, true);
-    public static final Border blackBorder3 = BorderFactory.createLineBorder(Color.black, 3, true);
-    public static final Border blackBorder2 = BorderFactory.createLineBorder(Color.black, 2, true);
+    public static final Border blackBorder3 = BorderFactory.createLineBorder(Color.black, 3, false);
+    public static final Border blackBorder2 = BorderFactory.createLineBorder(Color.black, 2, false);
     public static final Border blackBorder1 = BorderFactory.createLineBorder(Color.black, 1, false);
 
     public static final Font font_50 = new Font("Arial", Font.BOLD, 50);
@@ -52,14 +52,14 @@ public abstract class ToolBox {
         int scrollHeight = scrollPanelHeight;
 
         for (Component comp: scrollPanel.getComponents()) {
-            if (((Field) comp).getSelected()) {
+            if (comp instanceof Field && ((Field) comp).selected) {
                 Field field = (Field)comp;
 
                 updateUI(scrollPanel, field, false);
                 scrollHeight -= 64;
                 scrollPanel.setPreferredSize(new Dimension(550, scrollHeight));
 
-                names.add(field.getText());
+                names.add(field.displayText);
             }
         }
 

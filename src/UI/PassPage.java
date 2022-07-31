@@ -120,16 +120,16 @@ public class PassPage implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
         if (inputTitle.getText().equals("Input title...") || inputTitle.getText().equals("Requires title!...")) {
             inputTitle.setText("");
             inputTitle.setForeground(Color.darkGray);
             inputTitle.setFont(ToolBox.font_45);
         }
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-
     }
 
     @Override

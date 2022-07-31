@@ -80,18 +80,17 @@ public class TermField implements KeyListener, MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (textField.getText().equals("Press ENTER to confirm...")
-                || textField.getText().equals("Must contain only letters!...")
-                || textField.getText().equals("3-16 character limit!...")) {
-            textField.setText("");
-            textField.setForeground(Color.darkGray);
-            textField.setFont(ToolBox.font_30);
-        }
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-
+        if (textField.getText().equals("Press ENTER to confirm...")
+                || textField.getText().equals("Must contain only letters!...")
+                || textField.getText().equals("3-12 character limit!...")) {
+            textField.setText("");
+            textField.setForeground(Color.darkGray);
+            textField.setFont(ToolBox.font_30);
+        }
     }
 
     @Override
