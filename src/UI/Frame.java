@@ -1,5 +1,7 @@
 package UI;
 
+import Core.MUserData;
+
 import javax.swing.*;
 
 public class Frame extends JFrame {
@@ -34,6 +36,7 @@ public class Frame extends JFrame {
     }
 
     public static void main(String[] args) {
+        MUserData.createDirectory();
         new Frame();
     }
 }

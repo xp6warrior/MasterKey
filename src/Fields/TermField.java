@@ -10,6 +10,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.nio.charset.StandardCharsets;
 
 public class TermField implements KeyListener, MouseListener {
     private final JPanel scrollPanel;
@@ -44,8 +45,9 @@ public class TermField implements KeyListener, MouseListener {
                     break;
                 }
             }
-            if (hasSymbols) {
-                textField.setText("Must contain only letters!...");
+
+            if (hasSymbols || !StandardCharsets.US_ASCII.newEncoder().canEncode(textFieldText)) {
+                textField.setText("Must contain only standard letters!...");
                 conditionsMet = false;
             }
 
@@ -85,8 +87,8 @@ public class TermField implements KeyListener, MouseListener {
     @Override
     public void mousePressed(MouseEvent e) {
         if (textField.getText().equals("Press ENTER to confirm...")
-                || textField.getText().equals("Must contain only letters!...")
-                || textField.getText().equals("3-12 character limit!...")) {
+                || textField.getText().equals("3-12 character limit!...")
+                || textField.getText().equals("Must contain only standard letters!...")) {
             textField.setText("");
             textField.setForeground(Color.darkGray);
             textField.setFont(ToolBox.font_30);

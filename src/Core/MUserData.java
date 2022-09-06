@@ -10,6 +10,28 @@ public abstract class MUserData {
     private static final ArrayList<Password> passwords = new ArrayList<>();
     private static final ArrayList<Term> terms = new ArrayList<>();
 
+    private static String path;
+    public static void createDirectory() {
+        String homeDir = System.getProperty("user.home");
+        String os = System.getProperty("os.name").toLowerCase();
+        File directory;
+
+        if (os.contains("win")) {
+            directory = new File(homeDir + "\\Documents\\Password");
+        }
+        else if (os.contains("mac")) {
+            directory = new File(homeDir + "/Documents/Password");
+        }
+        else {
+            directory = new File("./Password");
+        }
+
+        if (!directory.exists()) {
+            directory.mkdir();
+        }
+        path = directory.getPath();
+    }
+
     public static void addPassword(Password password) {
         passwords.add(password);
     }
@@ -37,7 +59,7 @@ public abstract class MUserData {
 
     public static void saveToPasswords() {
         try {
-            BufferedWriter bw = new BufferedWriter(new FileWriter("res/Passwords.txt"));
+            BufferedWriter bw = new BufferedWriter(new FileWriter(path + "/Passwords.txt"));
 
             for (Password password: passwords) {
                 String title = password.getTitle();
@@ -52,7 +74,7 @@ public abstract class MUserData {
     }
     public static void saveToTerms() {
         try {
-            BufferedWriter bw = new BufferedWriter(new FileWriter("res/Terms.txt"));
+            BufferedWriter bw = new BufferedWriter(new FileWriter(path + "/Terms.txt"));
 
             for (Term term: terms) {
                 bw.write(term.getName()+"\n");
@@ -68,7 +90,7 @@ public abstract class MUserData {
         ArrayList<Password> passwordsToLoad = new ArrayList<>();
 
         try {
-            BufferedReader br = new BufferedReader(new FileReader("res/Passwords.txt"));
+            BufferedReader br = new BufferedReader(new FileReader(path + "/Passwords.txt"));
 
             String title = br.readLine();
             String pass = br.readLine();
@@ -87,7 +109,7 @@ public abstract class MUserData {
         ArrayList<Term> termsToLoad = new ArrayList<>();
 
         try {
-            BufferedReader br = new BufferedReader(new FileReader("res/Terms.txt"));
+            BufferedReader br = new BufferedReader(new FileReader(path + "/Terms.txt"));
 
             String line = br.readLine();
             while (line != null) {
