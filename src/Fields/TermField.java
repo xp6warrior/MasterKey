@@ -47,7 +47,7 @@ public class TermField implements KeyListener, MouseListener {
             }
 
             if (hasSymbols || !StandardCharsets.US_ASCII.newEncoder().canEncode(textFieldText)) {
-                textField.setText("Must contain only standard letters!...");
+                textField.setText("Must contain only ASCII letters!...");
                 conditionsMet = false;
             }
 
@@ -88,7 +88,7 @@ public class TermField implements KeyListener, MouseListener {
     public void mousePressed(MouseEvent e) {
         if (textField.getText().equals("Press ENTER to confirm...")
                 || textField.getText().equals("3-12 character limit!...")
-                || textField.getText().equals("Must contain only standard letters!...")) {
+                || textField.getText().equals("Must contain only ASCII letters!...")) {
             textField.setText("");
             textField.setForeground(Color.darkGray);
             textField.setFont(ToolBox.font_30);

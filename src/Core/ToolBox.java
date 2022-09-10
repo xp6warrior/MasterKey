@@ -8,6 +8,8 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public abstract class ToolBox {
+    public static final Image lock = new ImageIcon("res/Padlock.png").getImage();
+
     public static final Dimension titleSize = new Dimension(600, 150);
     public static final Dimension menuButtonSize = new Dimension(550, 110);
     public static final Dimension termButtonSize = new Dimension(170, 60);

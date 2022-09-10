@@ -3,6 +3,7 @@ package Core;
 import Objects.Password;
 import Objects.Term;
 
+import javax.crypto.Cipher;
 import java.io.*;
 import java.util.ArrayList;
 
@@ -64,14 +65,20 @@ public abstract class MUserData {
             for (Password password: passwords) {
                 String title = password.getTitle();
                 String pass = password.getPass();
-                bw.write(title + "\n" + pass + "\n");
+
+                String encryptedT = Cryptography.doCryptography(title, Cipher.ENCRYPT_MODE);
+                String encryptedP = Cryptography.doCryptography(pass, Cipher.ENCRYPT_MODE);
+
+                bw.write(encryptedT + " " + encryptedP + "\n");
             }
 
             bw.close();
             passwords.clear();
-
-        } catch (IOException ignore) {}
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
     public static void saveToTerms() {
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(path + "/Terms.txt"));
@@ -82,32 +89,37 @@ public abstract class MUserData {
 
             bw.close();
             terms.clear();
-
-        } catch (IOException ignore) {}
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static ArrayList<Password> loadFromPasswords() {
         ArrayList<Password> passwordsToLoad = new ArrayList<>();
-
         try {
             BufferedReader br = new BufferedReader(new FileReader(path + "/Passwords.txt"));
 
-            String title = br.readLine();
-            String pass = br.readLine();
-            while (title != null) {
-                passwordsToLoad.add(new Password(title, pass));
-                title = br.readLine();
-                pass = br.readLine();
+            String line = br.readLine();
+            while (line != null) {
+                String[] titlePass = line.split(" ");
+
+                String decryptedT = Cryptography.doCryptography(titlePass[0], Cipher.DECRYPT_MODE);
+                String decryptedP = Cryptography.doCryptography(titlePass[1], Cipher.DECRYPT_MODE);
+
+                passwordsToLoad.add(new Password(decryptedT, decryptedP));
+
+                line = br.readLine();
             }
             br.close();
-
-        } catch (IOException ignored) {}
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         return passwordsToLoad;
     }
+
     public static ArrayList<Term> loadFromTerms() {
         ArrayList<Term> termsToLoad = new ArrayList<>();
-
         try {
             BufferedReader br = new BufferedReader(new FileReader(path + "/Terms.txt"));
 
@@ -117,9 +129,21 @@ public abstract class MUserData {
                 line = br.readLine();
             }
             br.close();
-
-        } catch (IOException ignore) {}
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         return termsToLoad;
+    }
+
+    public static String hasData() {
+        String firstLine = null;
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(path + "/Passwords.txt"));
+            firstLine = br.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return firstLine;
     }
 }
