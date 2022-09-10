@@ -15,7 +15,7 @@ public class TermsPage {
 
     void create(Frame frame) {
         // Components
-        JLabel title = new JLabel("Modify Terms");
+        JLabel title = new JLabel("Add / Remove Terms");
         JButton add = new JButton("Add");
         JButton remove = new JButton("Remove");
         JButton back = new JButton("Back");

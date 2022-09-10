@@ -51,6 +51,6 @@ public abstract class Cryptography {
         key = k;
 
         String samplePassword = MUserData.hasData().split(" ")[0];
-        return doCryptography(samplePassword, Cipher.DECRYPT_MODE) != null;
+        return !doCryptography(samplePassword, Cipher.DECRYPT_MODE).equals("corrupt");
     }
 }

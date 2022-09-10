@@ -9,20 +9,24 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.nio.charset.StandardCharsets;
 
 public class PassPage implements MouseListener {
     private JTextField inputTitle;
-    private JLabel outputPass;
+    private JTextField outputPass;
 
     void create(Frame frame) {
         // Components
         JLabel title = new JLabel("Create Password");
         inputTitle = new JTextField("Input title...");
-        outputPass = new JLabel(".....");
-        JButton refresh = new JButton("R");
+        outputPass = new JTextField(".....");
+        JButton refresh = new JButton(ToolBox.refresh);
         JButton confirm = new JButton("Confirm");
         JButton back = new JButton("Back");
         JPanel bottomPanel = new JPanel();
+
+        inputTitle.setName("in");
+        outputPass.setName("out");
 
         // Removes blue highlight when clicking
         refresh.setFocusable(false);
@@ -34,6 +38,7 @@ public class PassPage implements MouseListener {
         refresh.addActionListener(e -> generate(outputPass));
         confirm.addActionListener(e -> confirm(inputTitle, outputPass));
         inputTitle.addMouseListener(this);
+        outputPass.addMouseListener(this);
 
         // Sizes
         title.setPreferredSize(ToolBox.titleSize);
@@ -87,19 +92,19 @@ public class PassPage implements MouseListener {
 
 
     // Creates a random password
-    private void generate(JLabel outputPass) {
+    private void generate(JTextField outputPass) {
         String randomPassword = RandomPassword.createRandomPassword();
         outputPass.setText(randomPassword);
         outputPass.setForeground(Color.darkGray);
     }
 
     // Confirms the password
-    private void confirm(JTextField inputTitle, JLabel outputPass) {
+    private void confirm(JTextField inputTitle, JTextField outputPass) {
         boolean conditionsMet = true;
         String input = inputTitle.getText();
         String output = outputPass.getText();
 
-        if (output.equals("Requires password!...") || output.equals(".....")) {
+        if (output.equals("Requires password!...") || output.equals(".....") || output.equals("")) {
             outputPass.setText("Requires password!...");
             outputPass.setForeground(Color.gray);
             conditionsMet = false;
@@ -109,6 +114,12 @@ public class PassPage implements MouseListener {
             inputTitle.setText("Requires title!...");
             inputTitle.setForeground(Color.gray);
             inputTitle.setFont(ToolBox.italic_45);
+            conditionsMet = false;
+        }
+
+        if (!StandardCharsets.US_ASCII.newEncoder().canEncode(output)) {
+            outputPass.setText("ASCII keys only!...");
+            outputPass.setForeground(Color.gray);
             conditionsMet = false;
         }
 
@@ -125,10 +136,19 @@ public class PassPage implements MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        if (inputTitle.getText().equals("Input title...") || inputTitle.getText().equals("Requires title!...")) {
-            inputTitle.setText("");
-            inputTitle.setForeground(Color.darkGray);
-            inputTitle.setFont(ToolBox.font_45);
+        if (e.getComponent().getName().equals("in")) {
+            if (inputTitle.getText().equals("Input title...") || inputTitle.getText().equals("Requires title!...")) {
+                inputTitle.setText("");
+                inputTitle.setForeground(Color.darkGray);
+                inputTitle.setFont(ToolBox.font_45);
+            }
+        }
+        else {
+            if (outputPass.getText().equals("ASCII keys only!...") || outputPass.getText().equals("Requires password!...")
+                    || outputPass.getText().equals(".....")) {
+                outputPass.setText("");
+                outputPass.setForeground(Color.darkGray);
+            }
         }
     }
 

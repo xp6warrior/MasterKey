@@ -4,15 +4,14 @@ import Core.MUserData;
 import Core.ToolBox;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class MenuPage extends MUserData {
     void create(Frame frame) {
         // Components
         JLabel title = new JLabel("Password Generator");
-        JButton newButton = new JButton("Create new password");
-        JButton termsButton = new JButton("Modify key terms");
-        JButton viewButton = new JButton("View passwords");
+        JButton newButton = new JButton("Create New Password");
+        JButton termsButton = new JButton("Add / Remove Terms");
+        JButton viewButton = new JButton("View Passwords");
 
         // Removes blue highlight when clicking
         newButton.setFocusable(false);
@@ -20,7 +19,7 @@ public class MenuPage extends MUserData {
         viewButton.setFocusable(false);
 
         // Buttons
-        newButton.addActionListener(e -> newButtonFunction(frame, newButton));
+        newButton.addActionListener(e -> frame.setPage(PageType.PASS));
         termsButton.addActionListener(e -> frame.setPage(PageType.TERMS));
         viewButton.addActionListener(e -> frame.setPage(PageType.VIEW));
 
@@ -45,14 +44,5 @@ public class MenuPage extends MUserData {
         frame.getContentPane().add(newButton);
         frame.getContentPane().add(termsButton);
         frame.getContentPane().add(viewButton);
-    }
-    private void newButtonFunction(Frame frame, JButton newButton) {
-        if (!loadFromTerms().isEmpty()) {
-            frame.setPage(PageType.PASS);
-        } else {
-            newButton.setFont(new Font("Arial", Font.ITALIC, 35));
-            newButton.setForeground(Color.gray);
-            newButton.setText("Create terms first!...");
-        }
     }
 }

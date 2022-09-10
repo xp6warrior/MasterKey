@@ -57,7 +57,7 @@ public class Frame extends JFrame {
             }
         }
         else {
-            key = JOptionPane.showInputDialog(null, "Password:", "Password Generator", JOptionPane.QUESTION_MESSAGE);
+            key = JOptionPane.showInputDialog(null, "Enter Password:", "Password Generator", JOptionPane.QUESTION_MESSAGE);
 
             if (key != null) {
                 if (Cryptography.keyTest(key)) {
