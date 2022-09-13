@@ -18,14 +18,14 @@ public abstract class RandomPassword {
 
     public static String createRandomPassword() {
         ArrayList<Term> terms = MUserData.loadFromTerms();
-        String termName = terms.get(random.nextInt(terms.size())).getName();
+        String term = terms.get(random.nextInt(terms.size())).getName();
 
-        int max = termName.length() + maxChar;
-        int min = termName.length() + minChar;
+        int max = term.length() + maxChar;
+        int min = term.length() + minChar;
 
         //-- random.nextInt((max - min) + 1) + min
         int newPassLength = random.nextInt((max - min) + 1) + min;
-        int termPlacementIndex = random.nextInt(newPassLength - termName.length());
+        int termPlacementIndex = random.nextInt(newPassLength - term.length());
 
         char[] password = new char[newPassLength];
 
@@ -42,8 +42,8 @@ public abstract class RandomPassword {
 
         // Adding the term (randomizing upper and lower case)
         int place = 0;
-        for (int i = termPlacementIndex; i < termName.length() + termPlacementIndex; i++) {
-            char termCharacter = termName.charAt(place);
+        for (int i = termPlacementIndex; i < term.length() + termPlacementIndex; i++) {
+            char termCharacter = term.charAt(place);
 
             // 1/3 chance of upper case
             if (random.nextInt(3) == 2) {
@@ -55,11 +55,11 @@ public abstract class RandomPassword {
         }
 
         // Converting char[] to String
-        StringBuilder pass = new StringBuilder();
+        String pass = "";
         for (char c : password) {
-            pass.append(c);
+            pass = pass.concat(String.valueOf(c));
         }
 
-        return pass.toString();
+        return pass;
     }
 }

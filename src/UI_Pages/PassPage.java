@@ -1,9 +1,11 @@
-package UI;
+package UI_Pages;
 
+import Core.Assets;
 import Core.MUserData;
 import Core.RandomPassword;
-import Core.ToolBox;
 import Objects.Password;
+import UI_Elements.Button;
+import UI_Elements.Label;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,21 +19,16 @@ public class PassPage implements MouseListener {
 
     void create(Frame frame) {
         // Components
-        JLabel title = new JLabel("Create Password");
+        Label title = new Label("Create New Password");
         inputTitle = new JTextField("Input title...");
         outputPass = new JTextField(".....");
-        JButton refresh = new JButton(ToolBox.refresh);
-        JButton confirm = new JButton("Confirm");
-        JButton back = new JButton("Back");
+        Button refresh = new Button(Assets.refresh, new Dimension(110, 110));
+        Button confirm = new Button("Confirm", Assets.mediumButtonSize);
+        Button back = new Button("Back", Assets.mediumButtonSize);
         JPanel bottomPanel = new JPanel();
 
         inputTitle.setName("in");
         outputPass.setName("out");
-
-        // Removes blue highlight when clicking
-        refresh.setFocusable(false);
-        confirm.setFocusable(false);
-        back.setFocusable(false);
 
         // Buttons
         back.addActionListener(e -> backButtonFunction(frame));
@@ -41,39 +38,26 @@ public class PassPage implements MouseListener {
         outputPass.addMouseListener(this);
 
         // Sizes
-        title.setPreferredSize(ToolBox.titleSize);
-        inputTitle.setPreferredSize(ToolBox.menuButtonSize);
-        outputPass.setPreferredSize(ToolBox.outputPassSize);
-        refresh.setPreferredSize(ToolBox.refreshSize);
-        confirm.setPreferredSize(ToolBox.confirmSize);
-        back.setPreferredSize(ToolBox.backSize);
-
-        // Alignment / Color / Border
-        title.setHorizontalAlignment(SwingConstants.CENTER);
+        inputTitle.setPreferredSize(Assets.menuButtonSize);
+        outputPass.setPreferredSize(Assets.outputPassSize);
         inputTitle.setHorizontalAlignment(SwingConstants.CENTER);
         outputPass.setHorizontalAlignment(SwingConstants.CENTER);
-        inputTitle.setBorder(ToolBox.blackBorder6);
+        inputTitle.setBorder(Assets.blackBorder6);
         outputPass.setBorder(BorderFactory.createLineBorder(Color.black, 5, true));
         inputTitle.setBackground(Color.lightGray);
         outputPass.setBackground(Color.lightGray);
         inputTitle.setForeground(Color.gray);
         outputPass.setOpaque(true);
-
-        // Fonts
-        title.setFont(ToolBox.font_50);
-        inputTitle.setFont(ToolBox.italic_45);
-        outputPass.setFont(ToolBox.italic_35);
-        refresh.setFont(ToolBox.font_35);
-        confirm.setFont(ToolBox.font_35);
-        back.setFont(ToolBox.font_35);
+        inputTitle.setFont(Assets.italic_45);
+        outputPass.setFont(Assets.italic_35);
 
         // BottomPanel components
-        bottomPanel.setLayout(ToolBox.passPageBottomPanelLayout);
+        bottomPanel.setLayout(Assets.passPageBottomPanelLayout);
         bottomPanel.add(confirm);
         bottomPanel.add(back);
 
         // Frame components
-        frame.getContentPane().setLayout(ToolBox.frameLayout);
+        frame.getContentPane().setLayout(Assets.frameLayout);
         frame.getContentPane().add(title);
         frame.getContentPane().add(inputTitle);
         frame.getContentPane().add(outputPass);
@@ -86,7 +70,7 @@ public class PassPage implements MouseListener {
         }
     }
     private void backButtonFunction(Frame frame) {
-        frame.setPage(PageType.MENU);
+        frame.setPage(Frame.MENU);
         MUserData.saveToPasswords();
     }
 
@@ -113,7 +97,7 @@ public class PassPage implements MouseListener {
         if (input.equals("") || input.equals("Requires title!...") || input.equals("Input title...")) {
             inputTitle.setText("Requires title!...");
             inputTitle.setForeground(Color.gray);
-            inputTitle.setFont(ToolBox.italic_45);
+            inputTitle.setFont(Assets.italic_45);
             conditionsMet = false;
         }
 
@@ -140,7 +124,7 @@ public class PassPage implements MouseListener {
             if (inputTitle.getText().equals("Input title...") || inputTitle.getText().equals("Requires title!...")) {
                 inputTitle.setText("");
                 inputTitle.setForeground(Color.darkGray);
-                inputTitle.setFont(ToolBox.font_45);
+                inputTitle.setFont(Assets.font_45);
             }
         }
         else {

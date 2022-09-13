@@ -26,19 +26,27 @@ public abstract class MUserData {
         else {
             directory = new File("./Password");
         }
-
         if (!directory.exists()) {
             directory.mkdir();
         }
         path = directory.getPath();
     }
+    public static String checkForData() {
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(path + "/Passwords.txt"));
+            return br.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     public static void addPassword(Password password) {
         passwords.add(password);
     }
-    public static void removePassword(String term) {
+    public static void removePassword(String passName) {
         for (Password pass: passwords) {
-            if (pass.getPass().equals(term) || term == null) {
+            if (pass.getPass().equals(passName) || passName == null) {
                 passwords.remove(pass);
                 break;
             }
@@ -134,16 +142,5 @@ public abstract class MUserData {
         }
 
         return termsToLoad;
-    }
-
-    public static String hasData() {
-        String firstLine = null;
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(path + "/Passwords.txt"));
-            firstLine = br.readLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return firstLine;
     }
 }

@@ -18,13 +18,11 @@ public abstract class Cryptography {
     }
 
     public static String doCryptography(String phrase, int cryptType) {
+        // Adds bytes to key until 16 bytes (characters)
         if (key.length() < 16) {
-            int missingBytes = 16 - key.length();
-
-            for (int i = 0; i < missingBytes; i++) {
-                key = key.concat("_");
-            }
+            addMissingBytes();
         }
+        // Creates a secret key object based on provided key
         Key secretKey = new SecretKeySpec(key.getBytes(), "AES");
 
         String message = "corrupt";
@@ -32,6 +30,7 @@ public abstract class Cryptography {
             Cipher cipher = Cipher.getInstance("AES");
             cipher.init(cryptType, secretKey);
 
+            // Encrypts/Decrypts (encrypted data is encoded using Base64 to be saved onto .txt file)
             if (cryptType == Cipher.ENCRYPT_MODE) {
                 byte[] byteCode = cipher.doFinal(phrase.getBytes());
                 message = Base64.getEncoder().encodeToString(byteCode);
@@ -41,16 +40,24 @@ public abstract class Cryptography {
                 message = new String(cipher.doFinal(byteCode));
             }
 
+            return message;
         } catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | BadPaddingException | IllegalBlockSizeException | IllegalArgumentException e) {
             e.printStackTrace();
+            return "corrupt";
         }
-        return message;
+    }
+    private static void addMissingBytes() {
+        int missingBytes = 16 - key.length();
+
+        for (int i = 0; i < missingBytes; i++) {
+            key = key.concat("_");
+        }
     }
 
     public static boolean keyTest(String k) {
         key = k;
 
-        String samplePassword = MUserData.hasData().split(" ")[0];
+        String samplePassword = MUserData.checkForData().split(" ")[0];
         return !doCryptography(samplePassword, Cipher.DECRYPT_MODE).equals("corrupt");
     }
 }
