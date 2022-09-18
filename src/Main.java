@@ -1,5 +1,5 @@
 import Core.Cryptography;
-import Core.MUserData;
+import Core.UserData;
 import UI_Pages.Frame;
 
 import javax.swing.*;
@@ -7,10 +7,10 @@ import java.nio.charset.StandardCharsets;
 
 public class Main {
     public static void main(String[] args) {
-        MUserData.createDirectory();
+        UserData.createDirectory();
         String key;
 
-        if (MUserData.checkForData() != null) {
+        if (UserData.checkForData() != null) {
             key = showMessage("Enter Password: ", JOptionPane.QUESTION_MESSAGE);
             if (key != null) { // null if operation is cancelled
                 if (Cryptography.keyTest(key)) {

@@ -1,7 +1,7 @@
 package UI_Pages;
 
-import Core.Assets;
-import Core.MUserData;
+import UI_Elements.Assets;
+import Core.UserData;
 import Core.RandomPassword;
 import Objects.Password;
 import UI_Elements.Button;
@@ -65,13 +65,13 @@ public class PassPage implements MouseListener {
         frame.getContentPane().add(BorderLayout.SOUTH, bottomPanel);
 
         // Load passwords
-        for (Password password: MUserData.loadFromPasswords()) {
-            MUserData.addPassword(password);
+        for (Password password: UserData.loadFromPasswords()) {
+            UserData.addPassword(password);
         }
     }
     private void backButtonFunction(Frame frame) {
         frame.setPage(Frame.MENU);
-        MUserData.saveToPasswords();
+        UserData.saveToPasswords();
     }
 
 
@@ -108,7 +108,7 @@ public class PassPage implements MouseListener {
         }
 
         if (conditionsMet) {
-            MUserData.addPassword(new Password(input, output));
+            UserData.addPassword(new Password(input, output));
         }
     }
 

@@ -1,7 +1,7 @@
 package UI_Pages;
 
-import Core.MUserData;
-import Core.Assets;
+import Core.UserData;
+import UI_Elements.Assets;
 import UI_Elements.Button;
 import UI_Elements.Label;
 import UI_Elements.PassField;
@@ -24,7 +24,7 @@ public class ViewPage {
         remove.addActionListener(e -> scrollField.remove(ScrollField.PASSWORD));
         back.addActionListener(e -> {
             frame.setPage(Frame.MENU);
-            MUserData.saveToPasswords();
+            UserData.saveToPasswords();
         });
 
         // BottomPanel components
@@ -39,10 +39,10 @@ public class ViewPage {
         frame.getContentPane().add(BorderLayout.SOUTH, bottomPanel);
 
         // Load passwords
-        for (Password password: MUserData.loadFromPasswords()) {
+        for (Password password: UserData.loadFromPasswords()) {
             PassField field = new PassField(500, 50, password);
             scrollField.add(field);
-            MUserData.addPassword(password);
+            UserData.addPassword(password);
         }
     }
 }

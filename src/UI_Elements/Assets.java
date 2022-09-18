@@ -1,4 +1,4 @@
-package Core;
+package UI_Elements;
 
 import javax.swing.*;
 import javax.swing.border.Border;

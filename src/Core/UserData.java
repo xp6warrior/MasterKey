@@ -7,7 +7,7 @@ import javax.crypto.Cipher;
 import java.io.*;
 import java.util.ArrayList;
 
-public abstract class MUserData {
+public abstract class UserData {
     private static final ArrayList<Password> passwords = new ArrayList<>();
     private static final ArrayList<Term> terms = new ArrayList<>();
 

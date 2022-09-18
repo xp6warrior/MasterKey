@@ -17,7 +17,7 @@ public abstract class RandomPassword {
     private static final int maxChar = 4;
 
     public static String createRandomPassword() {
-        ArrayList<Term> terms = MUserData.loadFromTerms();
+        ArrayList<Term> terms = UserData.loadFromTerms();
         String term = terms.get(random.nextInt(terms.size())).getName();
 
         int max = term.length() + maxChar;

@@ -1,7 +1,7 @@
 package UI_Pages;
 
-import Core.MUserData;
-import Core.Assets;
+import Core.UserData;
+import UI_Elements.Assets;
 import UI_Elements.Button;
 import UI_Elements.Field;
 import UI_Elements.Label;
@@ -25,11 +25,11 @@ public class TermsPage {
         JPanel bottomPanel = new JPanel();
 
         // Buttons
-        add.addActionListener(e -> scrollField.add(new TermField(550, 50)));
+        add.addActionListener(e -> scrollField.add(new TermField(500, 50)));
         remove.addActionListener(e -> scrollField.remove(ScrollField.TERM));
         back.addActionListener(e -> {
             frame.setPage(Frame.MENU);
-            MUserData.saveToTerms();
+            UserData.saveToTerms();
         });
 
         // BottomPanel components
@@ -45,11 +45,11 @@ public class TermsPage {
         frame.getContentPane().add(BorderLayout.SOUTH, bottomPanel);
 
         // Load terms
-        for (Term term: MUserData.loadFromTerms()) {
+        for (Term term: UserData.loadFromTerms()) {
             Field field = new Field(500, 50, true);
             field.setText(term.getName());
             scrollField.add(field);
-            MUserData.addTerm(term);
+            UserData.addTerm(term);
         }
     }
 }

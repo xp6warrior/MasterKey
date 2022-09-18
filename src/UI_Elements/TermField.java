@@ -1,6 +1,6 @@
 package UI_Elements;
 
-import Core.MUserData;
+import Core.UserData;
 import Objects.Term;
 
 import javax.swing.*;
@@ -9,6 +9,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class TermField extends Field implements KeyListener {
+    private static final Color bColor = new Color(0,0,0,0);
+    private static final Font font = new Font("Arial", Font.PLAIN, 30);
+
     private final JTextField textField;
 
     public TermField(int width, int height) {
@@ -16,9 +19,9 @@ public class TermField extends Field implements KeyListener {
 
         textField = new JTextField("Enter Term");
         textField.setPreferredSize(new Dimension(width - 10, height - 10)); // -10 to account for gaps
-        textField.setBackground(new Color(0,0,0,0));
+        textField.setBackground(bColor);
         textField.setForeground(Color.gray);
-        textField.setFont(font_30);
+        textField.setFont(font);
         textField.setBorder(null);
         textField.addKeyListener(this);
 
@@ -32,7 +35,7 @@ public class TermField extends Field implements KeyListener {
             this.remove(textField);
             this.addMouseListener(this);
 
-            MUserData.addTerm(new Term(textField.getText().trim()));
+            UserData.addTerm(new Term(textField.getText().trim()));
         }
     }
     @Override

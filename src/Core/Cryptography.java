@@ -57,7 +57,7 @@ public abstract class Cryptography {
     public static boolean keyTest(String k) {
         key = k;
 
-        String samplePassword = MUserData.checkForData().split(" ")[0];
+        String samplePassword = UserData.checkForData().split(" ")[0];
         return !doCryptography(samplePassword, Cipher.DECRYPT_MODE).equals("corrupt");
     }
 }

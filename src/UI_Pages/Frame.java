@@ -1,8 +1,9 @@
 package UI_Pages;
 
-import Core.Assets;
+import UI_Elements.Assets;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class Frame extends JFrame {
     private final MenuPage menu = new MenuPage();

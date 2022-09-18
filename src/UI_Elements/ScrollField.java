@@ -1,15 +1,18 @@
 package UI_Elements;
 
-import Core.MUserData;
+import Core.UserData;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 
 public class ScrollField extends JScrollPane {
+    private static final Border border = BorderFactory.createLineBorder(Color.black, 5, true);
+
     private final JPanel viewPanel;
-    private final int gap;
     private final int viewPanelWidth;
     private int viewPanelHeight;
+    private final int gap;
 
     public static final int PASSWORD = 0;
     public static final int TERM = 1;
@@ -28,7 +31,7 @@ public class ScrollField extends JScrollPane {
         this.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         this.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         this.setPreferredSize(new Dimension(width, height));
-        this.setBorder(BorderFactory.createLineBorder(Color.black, 5, true));
+        this.setBorder(border);
     }
 
     public void add(JComponent comp) {
@@ -49,8 +52,8 @@ public class ScrollField extends JScrollPane {
                 viewPanel.setPreferredSize(new Dimension(viewPanelWidth, viewPanelHeight));
 
                 switch (type) {
-                    case PASSWORD: MUserData.removePassword(field.getText().trim());break;
-                    case TERM: MUserData.removeTerm(field.getText().trim()); break;
+                    case PASSWORD: UserData.removePassword(field.getText().trim());break;
+                    case TERM: UserData.removeTerm(field.getText().trim()); break;
                 }
             }
         }

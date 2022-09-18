@@ -1,13 +1,13 @@
 package UI_Pages;
 
-import Core.MUserData;
-import Core.Assets;
+import Core.UserData;
+import UI_Elements.Assets;
 import UI_Elements.Button;
 import UI_Elements.Label;
 
 import java.awt.*;
 
-public class MenuPage extends MUserData {
+public class MenuPage extends UserData {
     private static final Dimension buttonSize = new Dimension(550, 110);
 
     void create(Frame frame) {
