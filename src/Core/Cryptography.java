@@ -43,7 +43,7 @@ public abstract class Cryptography {
             return message;
         } catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | BadPaddingException | IllegalBlockSizeException | IllegalArgumentException e) {
             e.printStackTrace();
-            return "corrupt";
+            return "_corrupt";
         }
     }
     private static void addMissingBytes() {
@@ -52,12 +52,5 @@ public abstract class Cryptography {
         for (int i = 0; i < missingBytes; i++) {
             key = key.concat("_");
         }
-    }
-
-    public static boolean keyTest(String k) {
-        key = k;
-
-        String samplePassword = UserData.checkForData().split(" ")[0];
-        return !doCryptography(samplePassword, Cipher.DECRYPT_MODE).equals("corrupt");
     }
 }

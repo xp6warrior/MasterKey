@@ -19,7 +19,7 @@ public class Frame extends JFrame {
     public Frame() {
         this.setSize(600, 600);
         this.setTitle("Password Generator");
-        this.setIconImage(Assets.lock);
+        this.setIconImage(new ImageIcon("res/padlock.png").getImage());
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
         this.setResizable(false);

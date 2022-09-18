@@ -5,7 +5,7 @@ import Core.UserData;
 import Core.RandomPassword;
 import Objects.Password;
 import UI_Elements.Button;
-import UI_Elements.Label;
+import UI_Elements.Title;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,7 +19,7 @@ public class PassPage implements MouseListener {
 
     void create(Frame frame) {
         // Components
-        Label title = new Label("Create New Password");
+        Title title = new Title("Create New Password");
         inputTitle = new JTextField("Input title...");
         outputPass = new JTextField(".....");
         Button refresh = new Button(Assets.refresh, new Dimension(110, 110));
@@ -78,8 +78,10 @@ public class PassPage implements MouseListener {
     // Creates a random password
     private void generate(JTextField outputPass) {
         String randomPassword = RandomPassword.createRandomPassword();
-        outputPass.setText(randomPassword);
-        outputPass.setForeground(Color.darkGray);
+        if (randomPassword != null) {
+            outputPass.setText(randomPassword);
+            outputPass.setForeground(Color.darkGray);
+        }
     }
 
     // Confirms the password

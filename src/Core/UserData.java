@@ -11,7 +11,12 @@ public abstract class UserData {
     private static final ArrayList<Password> passwords = new ArrayList<>();
     private static final ArrayList<Term> terms = new ArrayList<>();
 
+    public static final int PASSWORD_MODE = 1;
+    public static final int TERM_MODE = 2;
+
     private static String path;
+
+    @SuppressWarnings("all")
     public static void createDirectory() {
         String homeDir = System.getProperty("user.home");
         String os = System.getProperty("os.name").toLowerCase();
@@ -19,11 +24,9 @@ public abstract class UserData {
 
         if (os.contains("win")) {
             directory = new File(homeDir + "\\Documents\\Password");
-        }
-        else if (os.contains("mac")) {
+        } else if (os.contains("mac")) {
             directory = new File(homeDir + "/Documents/Password");
-        }
-        else {
+        } else {
             directory = new File("./Password");
         }
         if (!directory.exists()) {
@@ -31,18 +34,24 @@ public abstract class UserData {
         }
         path = directory.getPath();
     }
-    public static String checkForData() {
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(path + "/Passwords.txt"));
-            return br.readLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
+    public static boolean passwordTest(String pass) {
+        Cryptography.setKey(pass);
+        ArrayList<Password> data = loadFromPasswords();
+
+        for (Password p: data) {
+            if (!p.getTitle().equals("_corrupt") || !p.getPass().equals("_corrupt")) {
+                return true;
+            }
         }
+        return false;
     }
+
 
     public static void addPassword(Password password) {
         passwords.add(password);
+    }
+    public static void addTerm(Term term) {
+        terms.add(term);
     }
     public static void removePassword(String passName) {
         for (Password pass: passwords) {
@@ -51,10 +60,6 @@ public abstract class UserData {
                 break;
             }
         }
-    }
-
-    public static void addTerm(Term term) {
-        terms.add(term);
     }
     public static void removeTerm(String name) {
         for (Term term: terms) {
@@ -65,82 +70,105 @@ public abstract class UserData {
         }
     }
 
-
     public static void saveToPasswords() {
-        try {
-            BufferedWriter bw = new BufferedWriter(new FileWriter(path + "/Passwords.txt"));
+        ArrayList<String> data = new ArrayList<>();
 
-            for (Password password: passwords) {
-                String title = password.getTitle();
-                String pass = password.getPass();
+        for (Password pass: passwords) {
+            String encryptedT = Cryptography.doCryptography(pass.getTitle(), Cipher.ENCRYPT_MODE);
+            String encryptedP = Cryptography.doCryptography(pass.getPass(), Cipher.ENCRYPT_MODE);
 
-                String encryptedT = Cryptography.doCryptography(title, Cipher.ENCRYPT_MODE);
-                String encryptedP = Cryptography.doCryptography(pass, Cipher.ENCRYPT_MODE);
-
-                bw.write(encryptedT + " " + encryptedP + "\n");
-            }
-
-            bw.close();
-            passwords.clear();
-        } catch (IOException e) {
-            e.printStackTrace();
+            data.add(encryptedT + " " + encryptedP);
         }
-    }
 
+        saveData(data, PASSWORD_MODE);
+        passwords.clear();
+    }
     public static void saveToTerms() {
-        try {
-            BufferedWriter bw = new BufferedWriter(new FileWriter(path + "/Terms.txt"));
+        ArrayList<String> data = new ArrayList<>();
 
-            for (Term term: terms) {
-                bw.write(term.getName()+"\n");
+        for (Term term: terms) {
+            data.add(term.getName());
+        }
+
+        saveData(data, TERM_MODE);
+        terms.clear();
+    }
+    public static ArrayList<Password> loadFromPasswords() {
+        ArrayList<String> data = getData(PASSWORD_MODE, false);
+        ArrayList<Password> passwords = new ArrayList<>();
+
+        for (String line: data) {
+            String[] split = line.split(" ");
+
+            String decryptedT = Cryptography.doCryptography(split[0], Cipher.DECRYPT_MODE);
+            String decryptedP = "_corrupt";
+            if (split.length > 1) {
+                decryptedP = Cryptography.doCryptography(split[1], Cipher.DECRYPT_MODE);
+            }
+
+            passwords.add(new Password(decryptedT, decryptedP));
+        }
+
+        return passwords;
+    }
+    public static ArrayList<Term> loadFromTerms() {
+        ArrayList<String> data = getData(TERM_MODE, false);
+        ArrayList<Term> terms = new ArrayList<>();
+
+        for (String line: data) {
+            terms.add(new Term(line));
+        }
+
+        return terms;
+    }
+
+
+    private static String getPath(int mode) {
+        switch (mode) {
+            case PASSWORD_MODE: return path + "/Passwords.txt";
+            case TERM_MODE: return path + "/Terms.txt";
+        }
+        return "";
+    }
+
+    public static ArrayList<String> getData(int mode, boolean firstLine) {
+        String p = getPath(mode);
+        ArrayList<String> data = new ArrayList<>();
+
+        // Reads either first line or all data
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(p));
+            String line = br.readLine();
+
+            if (firstLine && line != null) {
+                data.add(line);
+            }
+            else if (!firstLine) {
+                while (line != null) {
+                    data.add(line);
+                    line = br.readLine();
+                }
+            }
+            br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return data;
+    }
+
+    private static void saveData(ArrayList<String> mode, int type) {
+        String p = getPath(type);
+
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter(p));
+            for (String line: mode) {
+                bw.write(line+"\n");
             }
 
             bw.close();
-            terms.clear();
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public static ArrayList<Password> loadFromPasswords() {
-        ArrayList<Password> passwordsToLoad = new ArrayList<>();
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(path + "/Passwords.txt"));
-
-            String line = br.readLine();
-            while (line != null) {
-                String[] titlePass = line.split(" ");
-
-                String decryptedT = Cryptography.doCryptography(titlePass[0], Cipher.DECRYPT_MODE);
-                String decryptedP = Cryptography.doCryptography(titlePass[1], Cipher.DECRYPT_MODE);
-
-                passwordsToLoad.add(new Password(decryptedT, decryptedP));
-
-                line = br.readLine();
-            }
-            br.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return passwordsToLoad;
-    }
-
-    public static ArrayList<Term> loadFromTerms() {
-        ArrayList<Term> termsToLoad = new ArrayList<>();
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(path + "/Terms.txt"));
-
-            String line = br.readLine();
-            while (line != null) {
-                termsToLoad.add(new Term(line));
-                line = br.readLine();
-            }
-            br.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return termsToLoad;
     }
 }

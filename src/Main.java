@@ -8,38 +8,35 @@ import java.nio.charset.StandardCharsets;
 public class Main {
     public static void main(String[] args) {
         UserData.createDirectory();
-        String key;
+        String password;
+        String msg = "Password Generator";
 
-        if (UserData.checkForData() != null) {
-            key = showMessage("Enter Password: ", JOptionPane.QUESTION_MESSAGE);
-            if (key != null) { // null if operation is cancelled
-                if (Cryptography.keyTest(key)) {
+        if (!UserData.getData(UserData.PASSWORD_MODE, true).isEmpty()) {
+            password = JOptionPane.showInputDialog(null, "Enter Password:", msg, JOptionPane.QUESTION_MESSAGE);
+
+            if (password != null) { // null if operation is cancelled
+                if (UserData.passwordTest(password)) {
                     new Frame();
                 } else {
-                    showMessage("Incorrect Password!", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Incorrect Password!", msg, JOptionPane.ERROR_MESSAGE);
                 }
             }
         }
         else {
-            key = showMessage("Create Password: ", JOptionPane.INFORMATION_MESSAGE);
-            if (key != null) {
-                if (keyMeetsRequirements(key)) {
-                    Cryptography.setKey(key);
+            password = JOptionPane.showInputDialog(null, "Create Password:", msg, JOptionPane.INFORMATION_MESSAGE);
+
+            if (password != null) {
+                if (keyMeetsRequirements(password)) {
+                    Cryptography.setKey(password);
                     new Frame();
+
                 } else {
-                    showMessage("Password must be between 1-16 ASCII characters!", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Password must be between 1-16 ASCII characters!", msg, JOptionPane.ERROR_MESSAGE);
                 }
             }
         }
     }
 
-    private static String showMessage(String msg, int type) {
-        if (type != JOptionPane.ERROR_MESSAGE) {
-            return JOptionPane.showInputDialog(null, msg, "Password Generator", type);
-        }
-        JOptionPane.showMessageDialog(null, msg, "Password Generator", JOptionPane.ERROR_MESSAGE);
-        return null;
-    }
     private static boolean keyMeetsRequirements(String key) {
         return (!key.equals("") && key.length() <= 16 && StandardCharsets.US_ASCII.newEncoder().canEncode(key));
     }

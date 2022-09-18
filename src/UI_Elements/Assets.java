@@ -5,7 +5,6 @@ import javax.swing.border.Border;
 import java.awt.*;
 
 public abstract class Assets {
-    public static final Image lock = new ImageIcon("res/padlock.png").getImage();
     public static final ImageIcon refresh = new ImageIcon("res/refresh.png");
 
     public static final Dimension mediumButtonSize = new Dimension(265, 60);

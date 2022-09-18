@@ -4,7 +4,7 @@ import Core.UserData;
 import UI_Elements.Assets;
 import UI_Elements.Button;
 import UI_Elements.Field;
-import UI_Elements.Label;
+import UI_Elements.Title;
 import UI_Elements.ScrollField;
 import UI_Elements.TermField;
 import Objects.Term;
@@ -17,7 +17,7 @@ public class TermsPage {
 
     void create(Frame frame) {
         // Components
-        Label title = new Label("Add / Remove Terms");
+        Title title = new Title("Add / Remove Terms");
         Button add = new Button("Add", buttonSize);
         Button remove = new Button("Remove", buttonSize);
         Button back = new Button("Back", buttonSize);

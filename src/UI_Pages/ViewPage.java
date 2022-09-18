@@ -3,7 +3,7 @@ package UI_Pages;
 import Core.UserData;
 import UI_Elements.Assets;
 import UI_Elements.Button;
-import UI_Elements.Label;
+import UI_Elements.Title;
 import UI_Elements.PassField;
 import UI_Elements.ScrollField;
 import Objects.Password;
@@ -12,11 +12,13 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ViewPage {
+    public static final Dimension buttonSize = new Dimension(265, 60);
+
     void create(Frame frame) {
         // Components
-        Label title = new Label("View Passwords");
-        Button remove = new Button("Remove", Assets.mediumButtonSize);
-        Button back = new Button("Back", Assets.mediumButtonSize);
+        Title title = new Title("View Passwords");
+        Button remove = new Button("Remove", buttonSize);
+        Button back = new Button("Back", buttonSize);
         ScrollField scrollField = new ScrollField(550, 260, 10);
         JPanel bottomPanel = new JPanel();
 

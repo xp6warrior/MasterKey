@@ -20,9 +20,12 @@ public class Field extends JButton implements MouseListener {
         this.setPreferredSize(new Dimension(width, height));
         this.setHorizontalAlignment(LEFT);
         this.setOpaque(false);
+        this.setFocusable(false);
+        this.setBackground(new Color(0,0,0,0));
         this.setFont(font);
         this.setBorder(border1);
         this.setLayout(layout);
+        this.setContentAreaFilled(false);
 
         if (canSelect) {
             this.addMouseListener(this);
