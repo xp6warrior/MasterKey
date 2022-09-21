@@ -24,11 +24,11 @@ public abstract class UserData {
         File directory;
 
         if (os.contains("win")) {
-            directory = new File(homeDir + "\\Documents\\KeyWizard");
+            directory = new File(homeDir + "\\Documents\\MasterKey");
         } else if (os.contains("mac")) {
-            directory = new File(homeDir + "/Documents/KeyWizard");
+            directory = new File(homeDir + "/Documents/MasterKey");
         } else {
-            directory = new File("./KeyWizard");
+            directory = new File("./MasterKey");
         }
         if (!directory.exists()) {
             directory.mkdir();
