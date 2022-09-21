@@ -4,12 +4,11 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Title extends JLabel {
-    private static final Dimension size = new Dimension(600, 150);
     private static final Font font = new Font("Arial", Font.BOLD, 50);
 
-    public Title(String text) {
+    public Title(String text, Dimension dim) {
         this.setText(text);
-        this.setPreferredSize(size);
+        this.setPreferredSize(dim);
         this.setHorizontalAlignment(CENTER);
         this.setFont(font);
     }

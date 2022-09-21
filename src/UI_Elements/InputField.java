@@ -1,5 +1,7 @@
 package UI_Elements;
 
+import Core.CommonAssets;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
@@ -7,12 +9,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 public class InputField extends JTextField implements MouseListener {
-    private static final Border border = BorderFactory.createLineBorder(Color.black, 6, true);
-    private static final Font font = new Font("Arial", Font.PLAIN, 45);
     private static final Dimension inSize = new Dimension(550, 125);
     private static final Dimension outSize = new Dimension(405, 125);
-    private static final Font inFont = new Font("Arial", Font.ITALIC, 45);
-    public static final Font outFont = new Font("Arial", Font.ITALIC, 35);
+    private static final Font inFont = new Font("Arial", Font.PLAIN, 45);
+    private static final Font outFont = new Font("Arial", Font.ITALIC, 35);
+    private static final Border border = BorderFactory.createLineBorder(Color.black, 6, true);
 
     public InputField(String type) {
         this.setName(type);
@@ -24,7 +25,7 @@ public class InputField extends JTextField implements MouseListener {
         switch (type) {
             case "in":
                 this.setPreferredSize(inSize);
-                this.setFont(inFont);
+                this.setFont(CommonAssets.inputItalic);
                 this.setText("Input title...");
                 this.setForeground(Color.gray);
                 break;
@@ -42,7 +43,7 @@ public class InputField extends JTextField implements MouseListener {
             if (this.getText().equals("Input title...") || this.getText().equals("Requires title!...") || this.getText().equals("Success!...")) {
                 this.setText("");
                 this.setForeground(Color.darkGray);
-                this.setFont(font);
+                this.setFont(inFont);
             }
         }
         else {

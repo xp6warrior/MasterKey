@@ -1,8 +1,8 @@
 package UI_Pages;
 
-import Objects.ComponentArray;
+import Core.MasterKey;
+import Objects.JComponentArray;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Objects;
@@ -22,8 +22,7 @@ public class Frame extends JFrame {
 
     public Frame() {
         this.setSize(600, 600);
-        this.setTitle("KeyWizard");
-        this.setName("KeyWizard");
+        this.setTitle(MasterKey.name);
         this.setIconImage(new ImageIcon(Objects.requireNonNull(getClass().getResource("/padlock.png"))).getImage());
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
@@ -48,7 +47,7 @@ public class Frame extends JFrame {
         this.repaint();
     }
 
-    public void add(ComponentArray components) {
+    public void add(JComponentArray components) {
         for (Component comp: components.getComponents()) {
             this.getContentPane().add(comp);
         }

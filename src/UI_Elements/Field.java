@@ -1,5 +1,7 @@
 package UI_Elements;
 
+import Core.CommonAssets;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
@@ -7,22 +9,20 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 public class Field extends JButton implements MouseListener {
-    private static final Font font = new Font("Arial", Font.PLAIN, 30);
     private static final FlowLayout layout = new FlowLayout(FlowLayout.LEFT, 5, 5);
-
     private static final Border border1 = BorderFactory.createLineBorder(Color.black, 1);
     private static final Border border2 = BorderFactory.createLineBorder(Color.black, 2);
     private static final Border border3 = BorderFactory.createLineBorder(Color.black, 3);
 
     private boolean selected = false;
 
-    public Field(int width, int height, boolean canSelect) {
-        this.setPreferredSize(new Dimension(width, height));
+    public Field(Dimension size, boolean canSelect) {
+        this.setPreferredSize(size);
         this.setHorizontalAlignment(LEFT);
         this.setOpaque(false);
         this.setFocusable(false);
         this.setBackground(new Color(0,0,0,0));
-        this.setFont(font);
+        this.setFont(CommonAssets.fieldFont);
         this.setBorder(border1);
         this.setLayout(layout);
         this.setContentAreaFilled(false);

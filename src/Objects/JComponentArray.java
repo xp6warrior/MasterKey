@@ -2,11 +2,11 @@ package Objects;
 
 import java.awt.*;
 
-public class ComponentArray {
+public class JComponentArray {
     private final Component[] components;
     private final Component[] bottomPanelComponents;
 
-    public ComponentArray(Component[] components, Component[] bottomPanel) {
+    public JComponentArray(Component[] components, Component[] bottomPanel) {
         this.components = components;
         this.bottomPanelComponents = bottomPanel;
     }

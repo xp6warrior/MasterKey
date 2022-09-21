@@ -1,5 +1,6 @@
 package UI_Elements;
 
+import Core.CommonAssets;
 import Core.UserData;
 import Objects.Term;
 
@@ -13,19 +14,18 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TermField extends Field implements KeyListener {
-    private static final Dimension size = new Dimension(500, 50);
-    private static final Color bColor = new Color(0,0,0,0);
-    private static final Font fPlain = new Font("Arial", Font.PLAIN, 30);
+    private static final Dimension smallSize = new Dimension(CommonAssets.fieldSize.width - 10, CommonAssets.fieldSize.height - 10);
     private static final Font fItalic = new Font("Arial", Font.ITALIC, 30);
     private static final Pattern symbols = Pattern.compile("[0-9!@#$%&*()_+=|<>?{}\\[\\]~-]");
+    private static final Color bColor = new Color(0,0,0,0);
 
     private final JTextField textField;
 
     public TermField() {
-        super(size.width, size.height, false);
+        super(CommonAssets.fieldSize, false);
 
         textField = new JTextField("Press ENTER to confirm...");
-        textField.setPreferredSize(new Dimension(size.width - 10, size.height - 10)); // -10 to account for gaps
+        textField.setPreferredSize(smallSize); // -10 to account for gaps
         textField.setBackground(bColor);
         textField.setForeground(Color.gray);
         textField.setFont(fItalic);
@@ -46,7 +46,7 @@ public class TermField extends Field implements KeyListener {
             if (clickRequirements()) {
                 textField.setText("");
                 textField.setForeground(Color.darkGray);
-                textField.setFont(fPlain);
+                textField.setFont(CommonAssets.fieldFont);
             }
         }
     }

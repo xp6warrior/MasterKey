@@ -1,14 +1,12 @@
 package UI_Pages;
 
+import Core.CommonAssets;
 import Core.UserData;
-import Objects.ComponentArray;
-import UI_Elements.Button;
-import UI_Elements.Title;
-import UI_Elements.PassField;
-import UI_Elements.ScrollField;
+import Objects.JComponentArray;
+import UI_Elements.*;
 import Objects.Password;
+import UI_Elements.Button;
 
-import javax.swing.*;
 import java.awt.*;
 
 public class ViewPage {
@@ -16,12 +14,12 @@ public class ViewPage {
 
     void create(Frame frame) {
         // Components
-        Title title = new Title("View Passwords");
+        Title title = new Title("View Passwords", CommonAssets.titleSize);
         Button remove = new Button("Remove", buttonSize);
         Button back = new Button("Back", buttonSize);
         ScrollField scrollField = new ScrollField();
 
-        ComponentArray components = new ComponentArray(new Component[]{title, scrollField}, new Component[]{remove, back});
+        JComponentArray components = new JComponentArray(new Component[]{title, scrollField}, new Component[]{remove, back});
 
         // Buttons
         remove.addActionListener(e -> scrollField.delete(true));

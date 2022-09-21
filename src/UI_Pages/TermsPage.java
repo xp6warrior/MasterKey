@@ -1,15 +1,12 @@
 package UI_Pages;
 
+import Core.CommonAssets;
 import Core.UserData;
-import Objects.ComponentArray;
-import UI_Elements.Button;
-import UI_Elements.Field;
-import UI_Elements.Title;
-import UI_Elements.ScrollField;
-import UI_Elements.TermField;
+import Objects.JComponentArray;
+import UI_Elements.*;
 import Objects.Term;
+import UI_Elements.Button;
 
-import javax.swing.*;
 import java.awt.*;
 
 public class TermsPage {
@@ -17,13 +14,13 @@ public class TermsPage {
 
     void create(Frame frame) {
         // Components
-        Title title = new Title("Add / Remove Terms");
+        Title title = new Title("Add / Remove Terms", CommonAssets.titleSize);
         Button add = new Button("Add", buttonSize);
         Button remove = new Button("Remove", buttonSize);
         Button back = new Button("Back", buttonSize);
         ScrollField scrollField = new ScrollField();
 
-        ComponentArray components = new ComponentArray(new Component[]{title, scrollField}, new Component[]{add, remove, back});
+        JComponentArray components = new JComponentArray(new Component[]{title, scrollField}, new Component[]{add, remove, back});
 
         // Buttons
         add.addActionListener(e -> scrollField.add(new TermField()));
@@ -38,7 +35,7 @@ public class TermsPage {
 
         // Load terms
         for (Term term: UserData.loadFromTerms()) {
-            Field field = new Field(500, 50, true);
+            Field field = new Field(CommonAssets.fieldSize, true);
             field.setText(term.getName());
             scrollField.add(field);
             UserData.addTerm(term);

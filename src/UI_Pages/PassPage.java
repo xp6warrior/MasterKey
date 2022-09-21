@@ -1,10 +1,11 @@
 package UI_Pages;
 
-import Objects.ComponentArray;
+import Objects.JComponentArray;
 import Core.UserData;
 import Core.RandomPassword;
 import Objects.Password;
 import UI_Elements.Button;
+import Core.CommonAssets;
 import UI_Elements.InputField;
 import UI_Elements.Title;
 
@@ -14,24 +15,23 @@ import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 public class PassPage {
-    private static final ImageIcon r = new ImageIcon(Objects.requireNonNull(PassPage.class.getResource("/refresh.png")));
+    private static final ImageIcon refreshIcon = new ImageIcon(Objects.requireNonNull(PassPage.class.getResource("/refresh.png")));
     private static final Dimension buttonSize = new Dimension(265, 60);
-    private static final Dimension rSize = new Dimension(125, 125);
-    private static final Font inputItalic = new Font("Arial", Font.ITALIC, 45);
+    private static final Dimension refreshSize = new Dimension(125, 125);
 
     private InputField inputTitle;
     private InputField outputPass;
 
     void create(Frame frame) {
         // Components
-        Title title = new Title("Create New Password");
+        Title title = new Title("Create New Password", CommonAssets.titleSize);
         inputTitle = new InputField("in");
         outputPass = new InputField("out");
-        Button refresh = new Button(r, rSize);
+        Button refresh = new Button(refreshIcon, refreshSize);
         Button confirm = new Button("Confirm", buttonSize);
         Button back = new Button("Back", buttonSize);
 
-        ComponentArray components = new ComponentArray(new Component[]{title, inputTitle, outputPass, refresh}, new Component[]{confirm, back});
+        JComponentArray components = new JComponentArray(new Component[]{title, inputTitle, outputPass, refresh}, new Component[]{confirm, back});
 
         // Buttons
         refresh.addActionListener(e -> generate(outputPass));
@@ -80,7 +80,7 @@ public class PassPage {
         if (input.equals("") || input.equals("Requires title!...") || input.equals("Input title...") || input.equals("Success!...")) {
             inputTitle.setText("Requires title!...");
             inputTitle.setForeground(Color.gray);
-            inputTitle.setFont(inputItalic);
+            inputTitle.setFont(CommonAssets.inputItalic);
             conditionsMet = false;
         }
 
@@ -94,7 +94,7 @@ public class PassPage {
             UserData.addPassword(new Password(input, output));
 
             inputTitle.setText("Success!...");
-            inputTitle.setFont(inputItalic);
+            inputTitle.setFont(CommonAssets.inputItalic);
             inputTitle.setForeground(Color.gray);
         }
     }
