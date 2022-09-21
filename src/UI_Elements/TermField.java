@@ -13,6 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TermField extends Field implements KeyListener {
+    private static final Dimension size = new Dimension(500, 50);
     private static final Color bColor = new Color(0,0,0,0);
     private static final Font fPlain = new Font("Arial", Font.PLAIN, 30);
     private static final Font fItalic = new Font("Arial", Font.ITALIC, 30);
@@ -20,11 +21,11 @@ public class TermField extends Field implements KeyListener {
 
     private final JTextField textField;
 
-    public TermField(int width, int height) {
-        super(width, height, false);
+    public TermField() {
+        super(size.width, size.height, false);
 
         textField = new JTextField("Press ENTER to confirm...");
-        textField.setPreferredSize(new Dimension(width - 10, height - 10)); // -10 to account for gaps
+        textField.setPreferredSize(new Dimension(size.width - 10, size.height - 10)); // -10 to account for gaps
         textField.setBackground(bColor);
         textField.setForeground(Color.gray);
         textField.setFont(fItalic);
@@ -73,12 +74,13 @@ public class TermField extends Field implements KeyListener {
         if (e.getKeyCode() == KeyEvent.VK_ENTER) {
             String resultMsg = enterRequirements();
 
-            if (resultMsg.equals("")) {
-                this.setText(textField.getText());
+            if (resultMsg == null) {
+                String text = textField.getText().toLowerCase();
+                this.setText(text);
                 this.remove(textField);
                 this.addMouseListener(this);
 
-                UserData.addTerm(new Term(textField.getText().trim()));
+                UserData.addTerm(new Term(text.trim()));
             }
             else {
                 textField.setText(resultMsg);
@@ -88,7 +90,7 @@ public class TermField extends Field implements KeyListener {
         }
     }
     private String enterRequirements() {
-        String resultMsg = "";
+        String resultMsg = null;
         Matcher mSymbols = symbols.matcher(textField.getText());
 
         if (!StandardCharsets.US_ASCII.newEncoder().canEncode(textField.getText()) || mSymbols.find()) {

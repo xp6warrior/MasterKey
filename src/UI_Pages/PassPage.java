@@ -1,79 +1,54 @@
 package UI_Pages;
 
-import UI_Elements.Assets;
+import Objects.ComponentArray;
 import Core.UserData;
 import Core.RandomPassword;
 import Objects.Password;
 import UI_Elements.Button;
+import UI_Elements.InputField;
 import UI_Elements.Title;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
-public class PassPage implements MouseListener {
-    private JTextField inputTitle;
-    private JTextField outputPass;
+public class PassPage {
+    private static final ImageIcon r = new ImageIcon(Objects.requireNonNull(PassPage.class.getResource("/refresh.png")));
+    private static final Dimension buttonSize = new Dimension(265, 60);
+    private static final Dimension rSize = new Dimension(125, 125);
+    private static final Font inputItalic = new Font("Arial", Font.ITALIC, 45);
+
+    private InputField inputTitle;
+    private InputField outputPass;
 
     void create(Frame frame) {
         // Components
         Title title = new Title("Create New Password");
-        inputTitle = new JTextField("Input title...");
-        outputPass = new JTextField(".....");
-        Button refresh = new Button(Assets.refresh, new Dimension(110, 110));
-        Button confirm = new Button("Confirm", Assets.mediumButtonSize);
-        Button back = new Button("Back", Assets.mediumButtonSize);
-        JPanel bottomPanel = new JPanel();
+        inputTitle = new InputField("in");
+        outputPass = new InputField("out");
+        Button refresh = new Button(r, rSize);
+        Button confirm = new Button("Confirm", buttonSize);
+        Button back = new Button("Back", buttonSize);
 
-        inputTitle.setName("in");
-        outputPass.setName("out");
+        ComponentArray components = new ComponentArray(new Component[]{title, inputTitle, outputPass, refresh}, new Component[]{confirm, back});
 
         // Buttons
-        back.addActionListener(e -> backButtonFunction(frame));
         refresh.addActionListener(e -> generate(outputPass));
         confirm.addActionListener(e -> confirm(inputTitle, outputPass));
-        inputTitle.addMouseListener(this);
-        outputPass.addMouseListener(this);
+        back.addActionListener(e -> {
+            frame.setPage(Frame.MENU);
+            UserData.saveToPasswords();
+        });
 
-        // Sizes
-        inputTitle.setPreferredSize(Assets.menuButtonSize);
-        outputPass.setPreferredSize(Assets.outputPassSize);
-        inputTitle.setHorizontalAlignment(SwingConstants.CENTER);
-        outputPass.setHorizontalAlignment(SwingConstants.CENTER);
-        inputTitle.setBorder(Assets.blackBorder6);
-        outputPass.setBorder(BorderFactory.createLineBorder(Color.black, 5, true));
-        inputTitle.setBackground(Color.lightGray);
-        outputPass.setBackground(Color.lightGray);
-        inputTitle.setForeground(Color.gray);
-        outputPass.setOpaque(true);
-        inputTitle.setFont(Assets.italic_45);
-        outputPass.setFont(Assets.italic_35);
-
-        // BottomPanel components
-        bottomPanel.setLayout(Assets.passPageBottomPanelLayout);
-        bottomPanel.add(confirm);
-        bottomPanel.add(back);
-
-        // Frame components
-        frame.getContentPane().setLayout(Assets.frameLayout);
-        frame.getContentPane().add(title);
-        frame.getContentPane().add(inputTitle);
-        frame.getContentPane().add(outputPass);
-        frame.getContentPane().add(refresh);
-        frame.getContentPane().add(BorderLayout.SOUTH, bottomPanel);
+        // Adding
+        frame.add(components);
 
         // Load passwords
         for (Password password: UserData.loadFromPasswords()) {
             UserData.addPassword(password);
         }
     }
-    private void backButtonFunction(Frame frame) {
-        frame.setPage(Frame.MENU);
-        UserData.saveToPasswords();
-    }
-
 
     // Creates a random password
     private void generate(JTextField outputPass) {
@@ -90,16 +65,22 @@ public class PassPage implements MouseListener {
         String input = inputTitle.getText();
         String output = outputPass.getText();
 
-        if (output.equals("Requires password!...") || output.equals(".....") || output.equals("")) {
+        if (output.length() > 16) {
+            outputPass.setText("16 character limit!...");
+            outputPass.setForeground(Color.gray);
+            conditionsMet = false;
+        }
+
+        if (output.equals("Requires password!...") || output.equals(".....") || output.equals("") || output.equals("16 character limit!...")) {
             outputPass.setText("Requires password!...");
             outputPass.setForeground(Color.gray);
             conditionsMet = false;
         }
 
-        if (input.equals("") || input.equals("Requires title!...") || input.equals("Input title...")) {
+        if (input.equals("") || input.equals("Requires title!...") || input.equals("Input title...") || input.equals("Success!...")) {
             inputTitle.setText("Requires title!...");
             inputTitle.setForeground(Color.gray);
-            inputTitle.setFont(Assets.italic_45);
+            inputTitle.setFont(inputItalic);
             conditionsMet = false;
         }
 
@@ -111,45 +92,10 @@ public class PassPage implements MouseListener {
 
         if (conditionsMet) {
             UserData.addPassword(new Password(input, output));
+
+            inputTitle.setText("Success!...");
+            inputTitle.setFont(inputItalic);
+            inputTitle.setForeground(Color.gray);
         }
-    }
-
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-        if (e.getComponent().getName().equals("in")) {
-            if (inputTitle.getText().equals("Input title...") || inputTitle.getText().equals("Requires title!...")) {
-                inputTitle.setText("");
-                inputTitle.setForeground(Color.darkGray);
-                inputTitle.setFont(Assets.font_45);
-            }
-        }
-        else {
-            if (outputPass.getText().equals("ASCII keys only!...") || outputPass.getText().equals("Requires password!...")
-                    || outputPass.getText().equals(".....")) {
-                outputPass.setText("");
-                outputPass.setForeground(Color.darkGray);
-            }
-        }
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-
     }
 }

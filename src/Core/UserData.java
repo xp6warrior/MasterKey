@@ -6,6 +6,7 @@ import Objects.Term;
 import javax.crypto.Cipher;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public abstract class UserData {
     private static final ArrayList<Password> passwords = new ArrayList<>();
@@ -23,11 +24,11 @@ public abstract class UserData {
         File directory;
 
         if (os.contains("win")) {
-            directory = new File(homeDir + "\\Documents\\Password");
+            directory = new File(homeDir + "\\Documents\\KeyWizard");
         } else if (os.contains("mac")) {
-            directory = new File(homeDir + "/Documents/Password");
+            directory = new File(homeDir + "/Documents/KeyWizard");
         } else {
-            directory = new File("./Password");
+            directory = new File("./KeyWizard");
         }
         if (!directory.exists()) {
             directory.mkdir();
@@ -100,10 +101,25 @@ public abstract class UserData {
         for (String line: data) {
             String[] split = line.split(" ");
 
-            String decryptedT = Cryptography.doCryptography(split[0], Cipher.DECRYPT_MODE);
+            String decryptedT = "_corrupt";
             String decryptedP = "_corrupt";
-            if (split.length > 1) {
-                decryptedP = Cryptography.doCryptography(split[1], Cipher.DECRYPT_MODE);
+
+            boolean Tsuccess = false;
+            for (String s : split) {
+                if (!Tsuccess) {
+                    decryptedT = Cryptography.doCryptography(s, Cipher.DECRYPT_MODE);
+
+                    if (!decryptedT.equals("_corrupt") && !decryptedT.equals("")) {
+                        System.out.println("a");
+                        Tsuccess = true;
+                    }
+                } else {
+                    decryptedP = Cryptography.doCryptography(s, Cipher.DECRYPT_MODE);
+
+                    if (!decryptedP.equals("_corrupt") && !decryptedP.equals("")) {
+                        break;
+                    }
+                }
             }
 
             passwords.add(new Password(decryptedT, decryptedP));

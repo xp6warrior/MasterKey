@@ -1,7 +1,7 @@
 package UI_Pages;
 
 import Core.UserData;
-import UI_Elements.Assets;
+import Objects.ComponentArray;
 import UI_Elements.Button;
 import UI_Elements.Title;
 import UI_Elements.PassField;
@@ -19,30 +19,23 @@ public class ViewPage {
         Title title = new Title("View Passwords");
         Button remove = new Button("Remove", buttonSize);
         Button back = new Button("Back", buttonSize);
-        ScrollField scrollField = new ScrollField(550, 260, 10);
-        JPanel bottomPanel = new JPanel();
+        ScrollField scrollField = new ScrollField();
+
+        ComponentArray components = new ComponentArray(new Component[]{title, scrollField}, new Component[]{remove, back});
 
         // Buttons
-        remove.addActionListener(e -> scrollField.remove(ScrollField.PASSWORD));
+        remove.addActionListener(e -> scrollField.delete(true));
         back.addActionListener(e -> {
             frame.setPage(Frame.MENU);
             UserData.saveToPasswords();
         });
 
-        // BottomPanel components
-        bottomPanel.setLayout(Assets.bottomPanelLayout);
-        bottomPanel.add(remove);
-        bottomPanel.add(back);
-
-        // Frame components
-        frame.getContentPane().setLayout(Assets.frameLayout);
-        frame.getContentPane().add(title);
-        frame.getContentPane().add(scrollField);
-        frame.getContentPane().add(BorderLayout.SOUTH, bottomPanel);
+        // Adding
+        frame.add(components);
 
         // Load passwords
         for (Password password: UserData.loadFromPasswords()) {
-            PassField field = new PassField(500, 50, password);
+            PassField field = new PassField(password);
             scrollField.add(field);
             UserData.addPassword(password);
         }

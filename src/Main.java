@@ -9,7 +9,7 @@ public class Main {
     public static void main(String[] args) {
         UserData.createDirectory();
         String password;
-        String msg = "Password Generator";
+        String msg = "KeyWizard";
 
         if (!UserData.getData(UserData.PASSWORD_MODE, true).isEmpty()) {
             password = JOptionPane.showInputDialog(null, "Enter Password:", msg, JOptionPane.QUESTION_MESSAGE);

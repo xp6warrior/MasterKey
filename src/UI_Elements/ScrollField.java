@@ -10,29 +10,25 @@ import java.awt.event.AdjustmentListener;
 
 public class ScrollField extends JScrollPane {
     private static final Border border = BorderFactory.createLineBorder(Color.black, 5, true);
+    private static final Dimension size = new Dimension(550, 260);
+    private final int gap = 10;
 
+    private int viewPanelHeight = gap;
     private final JPanel viewPanel;
     private final int viewPanelWidth;
-    private int viewPanelHeight;
-    private final int gap;
 
-    public static final int PASSWORD = 0;
-    public static final int TERM = 1;
-
-    public ScrollField(int width, int height, int vgap) {
+    public ScrollField() {
         viewPanel = new JPanel();
-        viewPanelWidth = width - 50; // Right side offset
-        viewPanelHeight = vgap;
-        this.gap = vgap;
+        viewPanelWidth = size.width - 50; // Right side offset
 
         viewPanel.setPreferredSize(new Dimension(viewPanelWidth, viewPanelHeight));
-        viewPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, vgap));
+        viewPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, gap));
         viewPanel.setBackground(Color.lightGray);
 
         this.setViewportView(viewPanel);
         this.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         this.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        this.setPreferredSize(new Dimension(width, height));
+        this.setPreferredSize(new Dimension(size.width, size.height));
         this.setBorder(border);
         this.getVerticalScrollBar().setUnitIncrement(12);
     }
@@ -52,7 +48,7 @@ public class ScrollField extends JScrollPane {
         viewPanel.repaint();
     }
 
-    public void remove(int type) {
+    public void delete(boolean pass) {
         for (Component comp: viewPanel.getComponents()) {
             Field field = (Field) comp;
             if (field.getSelected()) {
@@ -60,9 +56,10 @@ public class ScrollField extends JScrollPane {
                 viewPanelHeight -= comp.getPreferredSize().height + gap;
                 viewPanel.setPreferredSize(new Dimension(viewPanelWidth, viewPanelHeight));
 
-                switch (type) {
-                    case PASSWORD: UserData.removePassword(field.getText().trim());break;
-                    case TERM: UserData.removeTerm(field.getText().trim()); break;
+                if (pass) {
+                    UserData.removePassword(field.getText().trim());
+                } else  {
+                    UserData.removeTerm(field.getText().trim());
                 }
             }
         }
