@@ -40,7 +40,7 @@ public class InputField extends JTextField implements MouseListener {
     @Override
     public void mousePressed(MouseEvent e) {
         if (this.getName().equals("in")) {
-            if (this.getText().equals("Input title...") || this.getText().equals("Requires title!...") || this.getText().equals("Success!...")) {
+            if (this.getText().equals("Input title...") || this.getText().equals("Requires title!...") || this.getText().equals("Success!...") || this.getText().equals("16 character limit!...")) {
                 this.setText("");
                 this.setForeground(Color.darkGray);
                 this.setFont(inFont);

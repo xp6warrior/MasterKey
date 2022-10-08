@@ -22,7 +22,7 @@ public class PassPage {
     private InputField inputTitle;
     private InputField outputPass;
 
-    void create(Frame frame) {
+    public void create(Frame frame) {
         // Components
         Title title = new Title("Create New Password", CommonAssets.titleSize);
         inputTitle = new InputField("in");
@@ -31,7 +31,7 @@ public class PassPage {
         Button confirm = new Button("Confirm", buttonSize);
         Button back = new Button("Back", buttonSize);
 
-        JComponentArray components = new JComponentArray(new Component[]{title, inputTitle, outputPass, refresh}, new Component[]{confirm, back});
+        JComponentArray components = new JComponentArray(new JComponent[]{title, inputTitle, outputPass, refresh}, new JComponent[]{confirm, back});
 
         // Buttons
         refresh.addActionListener(e -> generate(outputPass));
@@ -51,7 +51,7 @@ public class PassPage {
     }
 
     // Creates a random password
-    private void generate(JTextField outputPass) {
+    private void generate(InputField outputPass) {
         String randomPassword = RandomPassword.createRandomPassword();
         if (randomPassword != null) {
             outputPass.setText(randomPassword);
@@ -60,7 +60,7 @@ public class PassPage {
     }
 
     // Confirms the password
-    private void confirm(JTextField inputTitle, JTextField outputPass) {
+    private void confirm(InputField inputTitle, InputField outputPass) {
         boolean conditionsMet = true;
         String input = inputTitle.getText();
         String output = outputPass.getText();
@@ -71,13 +71,20 @@ public class PassPage {
             conditionsMet = false;
         }
 
+        if (input.length() > 16) {
+            inputTitle.setText("16 character limit!...");
+            inputTitle.setForeground(Color.gray);
+            inputTitle.setFont(CommonAssets.inputItalic);
+            conditionsMet = false;
+        }
+
         if (output.equals("Requires password!...") || output.equals(".....") || output.equals("") || output.equals("16 character limit!...")) {
             outputPass.setText("Requires password!...");
             outputPass.setForeground(Color.gray);
             conditionsMet = false;
         }
 
-        if (input.equals("") || input.equals("Requires title!...") || input.equals("Input title...") || input.equals("Success!...")) {
+        if (input.equals("") || input.equals("Requires title!...") || input.equals("Input title...") || input.equals("Success!...") || input.equals("16 character limit!...")) {
             inputTitle.setText("Requires title!...");
             inputTitle.setForeground(Color.gray);
             inputTitle.setFont(CommonAssets.inputItalic);

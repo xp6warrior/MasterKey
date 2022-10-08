@@ -33,7 +33,7 @@ public class Frame extends JFrame {
         setPage(MENU);
     }
 
-    void setPage(int page) {
+    public void setPage(int page) {
         this.getContentPane().removeAll();
 
         switch (page) {
@@ -47,16 +47,16 @@ public class Frame extends JFrame {
         this.repaint();
     }
 
-    public void add(JComponentArray components) {
-        for (Component comp: components.getComponents()) {
+    public void add(JComponentArray comps) {
+        for (Component comp: comps.getComponents()) {
             this.getContentPane().add(comp);
         }
 
-        if (components.getBottomPanelComponents() != null) {
+        if (comps.getBottomPanelComponents() != null) {
             JPanel bottomPanel = new JPanel();
             bottomPanel.setLayout(bottomPanelLayout);
 
-            for (Component comp: components.getBottomPanelComponents()) {
+            for (Component comp: comps.getBottomPanelComponents()) {
                 bottomPanel.add(comp);
             }
 

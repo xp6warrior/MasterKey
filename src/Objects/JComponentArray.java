@@ -1,12 +1,13 @@
 package Objects;
 
+import javax.swing.*;
 import java.awt.*;
 
 public class JComponentArray {
-    private final Component[] components;
-    private final Component[] bottomPanelComponents;
+    private final JComponent[] components;
+    private final JComponent[] bottomPanelComponents;
 
-    public JComponentArray(Component[] components, Component[] bottomPanel) {
+    public JComponentArray(JComponent[] components, JComponent[] bottomPanel) {
         this.components = components;
         this.bottomPanelComponents = bottomPanel;
     }

@@ -48,7 +48,7 @@ public class ScrollField extends JScrollPane {
         viewPanel.repaint();
     }
 
-    public void delete(boolean pass) {
+    public void delete(boolean isPassword) {
         for (Component comp: viewPanel.getComponents()) {
             Field field = (Field) comp;
             if (field.getSelected()) {
@@ -56,7 +56,7 @@ public class ScrollField extends JScrollPane {
                 viewPanelHeight -= comp.getPreferredSize().height + gap;
                 viewPanel.setPreferredSize(new Dimension(viewPanelWidth, viewPanelHeight));
 
-                if (pass) {
+                if (isPassword) {
                     UserData.removePassword(field.getText().trim());
                 } else  {
                     UserData.removeTerm(field.getText().trim());

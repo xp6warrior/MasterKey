@@ -7,19 +7,20 @@ import UI_Elements.*;
 import Objects.Password;
 import UI_Elements.Button;
 
+import javax.swing.*;
 import java.awt.*;
 
 public class ViewPage {
     public static final Dimension buttonSize = new Dimension(265, 60);
 
-    void create(Frame frame) {
+    public void create(Frame frame) {
         // Components
         Title title = new Title("View Passwords", CommonAssets.titleSize);
         Button remove = new Button("Remove", buttonSize);
         Button back = new Button("Back", buttonSize);
         ScrollField scrollField = new ScrollField();
 
-        JComponentArray components = new JComponentArray(new Component[]{title, scrollField}, new Component[]{remove, back});
+        JComponentArray components = new JComponentArray(new JComponent[]{title, scrollField}, new JComponent[]{remove, back});
 
         // Buttons
         remove.addActionListener(e -> scrollField.delete(true));
