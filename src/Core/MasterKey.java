@@ -1,5 +1,6 @@
 package Core;
 
+import Objects.Password;
 import UI_Pages.Frame;
 
 import javax.swing.*;

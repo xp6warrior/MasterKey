@@ -6,7 +6,6 @@ import Objects.Term;
 import javax.crypto.Cipher;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public abstract class UserData {
     private static final ArrayList<Password> passwords = new ArrayList<>();
@@ -110,7 +109,6 @@ public abstract class UserData {
                     decryptedT = Cryptography.doCryptography(s, Cipher.DECRYPT_MODE);
 
                     if (!decryptedT.equals("_corrupt") && !decryptedT.equals("")) {
-                        System.out.println("a");
                         Tsuccess = true;
                     }
                 } else {
@@ -127,10 +125,15 @@ public abstract class UserData {
 
         return passwords;
     }
-    public static ArrayList<Term> loadFromTerms() {
-        ArrayList<String> data = getData(TERM_MODE, false);
-        ArrayList<Term> terms = new ArrayList<>();
 
+    // This method is invoked when a list of Terms is needed
+    // Return value: ArrayList<Term> terms - a list of Term objects
+    public static ArrayList<Term> loadFromTerms() {
+
+        ArrayList<Term> terms = new ArrayList<>(); // Return data
+        ArrayList<String> data = getData(UserData.TERM_MODE, false); // Gets save data in the form of Strings
+
+        // Transforms String values into Term Objects
         for (String line: data) {
             terms.add(new Term(line));
         }
@@ -147,24 +150,33 @@ public abstract class UserData {
         return "";
     }
 
+    // The method for reading general data from a file
+    // Parameters: int mode - the type of data (Password or Term), boolean firstLine - if the method should return only the first line
+    // Return value: ArrayList<String> data - general data read from the file
     public static ArrayList<String> getData(int mode, boolean firstLine) {
-        String p = getPath(mode);
-        ArrayList<String> data = new ArrayList<>();
 
-        // Reads either first line or all data
+        ArrayList<String> data = new ArrayList<>(); // Return data
+        String p = getPath(mode); // Gets the system path to the file
+
+        // Try/Catch in case of IOException
         try {
+
+            // The FileReader is placed in a BufferedReader to provide a buffer as well as functionality (readline() method)
             BufferedReader br = new BufferedReader(new FileReader(p));
             String line = br.readLine();
 
+            // Reads only first line
             if (firstLine && line != null) {
                 data.add(line);
             }
+            // Reads all data
             else if (!firstLine) {
                 while (line != null) {
                     data.add(line);
                     line = br.readLine();
                 }
             }
+
             br.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -173,12 +185,18 @@ public abstract class UserData {
         return data;
     }
 
-    private static void saveData(ArrayList<String> mode, int type) {
-        String p = getPath(type);
+    // The method for writing general data onto a file
+    // Parameters: ArrayList<String> data - The general data being written, int mode - the type of data (Password or Term)
+    private static void saveData(ArrayList<String> data, int mode) {
 
+        String p = getPath(mode); // Gets the system path to the file
+
+        // Try/Catch in case of IOException
         try {
+            // The FileWriter is placed in a BufferedWriter to provide a buffer
             BufferedWriter bw = new BufferedWriter(new FileWriter(p));
-            for (String line: mode) {
+
+            for (String line: data) {
                 bw.write(line+"\n");
             }
 

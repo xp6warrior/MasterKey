@@ -51,7 +51,8 @@ public class TermField extends Field implements KeyListener {
         }
     }
     private boolean clickRequirements() {
-        return textField.getText().equals("Press ENTER to confirm...") || textField.getText().equals("3-12 character limit!...") || textField.getText().equals("ASCII Letters only!...");
+        return textField.getText().equals("Press ENTER to confirm...") || textField.getText().equals("3-12 character limit!...")
+                || textField.getText().equals("ASCII Letters only!...") || textField.getText().equals("Requires name!...");
     }
 
     // Disable borders for TextField
@@ -92,12 +93,16 @@ public class TermField extends Field implements KeyListener {
     private String enterRequirements() {
         String resultMsg = null;
         Matcher mSymbols = symbols.matcher(textField.getText());
+        String text = textField.getText();
 
-        if (!StandardCharsets.US_ASCII.newEncoder().canEncode(textField.getText()) || mSymbols.find()) {
+        if (text.length() < 3 || text.length() > 12) {
+            resultMsg = "3-12 character limit!...";
+        }
+        if (!StandardCharsets.US_ASCII.newEncoder().canEncode(text) || mSymbols.find()) {
             resultMsg = "ASCII Letters only!...";
         }
-        if (textField.getText().length() < 3 || textField.getText().length() > 12) {
-            resultMsg = "3-12 character limit!...";
+        if (text.equals("") || text.equals("3-12 character limit!...") || text.equals("ASCII Letters only!...") || text.equals("Requires name!...")) {
+            resultMsg = "Requires name!...";
         }
 
         return resultMsg;

@@ -1,6 +1,10 @@
 package Objects;
 
 public class Password {
+    // Password:
+    // An object which stores a password and its corresponding title
+    // Used to transfer data of one password-title pair between classes
+
     private final String title;
     private final String pass;
 

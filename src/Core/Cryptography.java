@@ -18,19 +18,22 @@ public abstract class Cryptography {
     }
 
     public static String doCryptography(String phrase, int cryptType) {
+
         // Adds bytes to key until 16 bytes (characters)
         if (key.length() < 16) {
             addMissingBytes();
         }
         // Creates a secret key object based on provided key
         Key secretKey = new SecretKeySpec(key.getBytes(), "AES");
+        String message = "";
 
-        String message = "corrupt";
         try {
+
+            // Creates a cryptographic cipher in charge of the encryption/decryption using AES encryption algorithm
             Cipher cipher = Cipher.getInstance("AES");
             cipher.init(cryptType, secretKey);
 
-            // Encrypts/Decrypts (encrypted data is encoded using Base64 to be saved onto .txt file)
+            // Encrypts/Decrypts (encrypted data is encoded using Base64 so that it can be saved onto .txt file)
             if (cryptType == Cipher.ENCRYPT_MODE) {
                 byte[] byteCode = cipher.doFinal(phrase.getBytes());
                 message = Base64.getEncoder().encodeToString(byteCode);
@@ -41,9 +44,10 @@ public abstract class Cryptography {
             }
 
             return message;
+
         } catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | BadPaddingException | IllegalBlockSizeException | IllegalArgumentException e) {
             e.printStackTrace();
-            return "_corrupt";
+            return "_corrupt"; // Return value if there is error with cryptography
         }
     }
     private static void addMissingBytes() {

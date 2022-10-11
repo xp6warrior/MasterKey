@@ -40,14 +40,14 @@ public class InputField extends JTextField implements MouseListener {
     @Override
     public void mousePressed(MouseEvent e) {
         if (this.getName().equals("in")) {
-            if (this.getText().equals("Input title...") || this.getText().equals("Requires title!...") || this.getText().equals("Success!...") || this.getText().equals("16 character limit!...")) {
+            if (this.getText().equals("Input title...") || this.getText().equals("Requires title!...") || this.getText().equals("Success!...") || this.getText().equals("16 ASCII char limit!...")) {
                 this.setText("");
                 this.setForeground(Color.darkGray);
                 this.setFont(inFont);
             }
         }
         else {
-            if (this.getText().equals("ASCII keys only!...") || this.getText().equals("Requires password!...") || this.getText().equals("16 character limit!...") || this.getText().equals(".....")) {
+            if (this.getText().equals("16 ASCII char limit!...") || this.getText().equals("Requires password!...") || this.getText().equals(".....")) {
                 this.setText("");
                 this.setForeground(Color.darkGray);
             }

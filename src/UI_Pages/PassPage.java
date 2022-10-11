@@ -65,35 +65,30 @@ public class PassPage {
         String input = inputTitle.getText();
         String output = outputPass.getText();
 
-        if (output.length() > 16) {
-            outputPass.setText("16 character limit!...");
+        if (output.length() > 16 || !StandardCharsets.US_ASCII.newEncoder().canEncode(output)) {
+            outputPass.setText("16 ASCII char limit!...");
             outputPass.setForeground(Color.gray);
             conditionsMet = false;
         }
 
-        if (input.length() > 16) {
-            inputTitle.setText("16 character limit!...");
+        if (input.length() > 16 || !StandardCharsets.US_ASCII.newEncoder().canEncode(input)) {
+            inputTitle.setText("16 ASCII char limit!...");
             inputTitle.setForeground(Color.gray);
             inputTitle.setFont(CommonAssets.inputItalic);
             conditionsMet = false;
         }
 
-        if (output.equals("Requires password!...") || output.equals(".....") || output.equals("") || output.equals("16 character limit!...")) {
+
+        if (output.equals("Requires password!...") || output.equals(".....") || output.equals("") || output.equals("16 ASCII char limit!...")) {
             outputPass.setText("Requires password!...");
             outputPass.setForeground(Color.gray);
             conditionsMet = false;
         }
 
-        if (input.equals("") || input.equals("Requires title!...") || input.equals("Input title...") || input.equals("Success!...") || input.equals("16 character limit!...")) {
+        if (input.equals("") || input.equals("Requires title!...") || input.equals("Input title...") || input.equals("Success!...") || input.equals("16 ASCII char limit!...")) {
             inputTitle.setText("Requires title!...");
             inputTitle.setForeground(Color.gray);
             inputTitle.setFont(CommonAssets.inputItalic);
-            conditionsMet = false;
-        }
-
-        if (!StandardCharsets.US_ASCII.newEncoder().canEncode(output)) {
-            outputPass.setText("ASCII keys only!...");
-            outputPass.setForeground(Color.gray);
             conditionsMet = false;
         }
 
