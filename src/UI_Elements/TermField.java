@@ -69,13 +69,12 @@ public class TermField extends Field implements KeyListener {
         }
     }
 
-    // Enter functionality
-    @Override
+    @Override // Enter functionality, method runs every time a key is pressed (when the TermField is being typed into)
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+        if (e.getKeyCode() == KeyEvent.VK_ENTER) { // If the key pressed is the ENTER key
             String resultMsg = enterRequirements();
 
-            if (resultMsg == null) {
+            if (resultMsg == null) { // If term name meets requirements -> removes JTextField and creates the Term
                 String text = textField.getText().toLowerCase();
                 this.setText(text);
                 this.remove(textField);
@@ -83,7 +82,7 @@ public class TermField extends Field implements KeyListener {
 
                 UserData.addTerm(new Term(text.trim()));
             }
-            else {
+            else { // Else -> sets the text to the warning message
                 textField.setText(resultMsg);
                 textField.setForeground(Color.gray);
                 textField.setFont(fItalic);
@@ -95,13 +94,13 @@ public class TermField extends Field implements KeyListener {
         Matcher mSymbols = symbols.matcher(textField.getText());
         String text = textField.getText();
 
-        if (text.length() < 3 || text.length() > 12) {
+        if (text.length() < 3 || text.length() > 12) { // If the term name is not between 3-12 characters
             resultMsg = "3-12 character limit!...";
         }
-        if (!StandardCharsets.US_ASCII.newEncoder().canEncode(text) || mSymbols.find()) {
+        if (!StandardCharsets.US_ASCII.newEncoder().canEncode(text) || mSymbols.find()) { // If term name contains non ASCII characters or numbers/symbols
             resultMsg = "ASCII Letters only!...";
         }
-        if (text.equals("") || text.equals("3-12 character limit!...") || text.equals("ASCII Letters only!...") || text.equals("Requires name!...")) {
+        if (text.equals("") || text.equals("3-12 character limit!...") || text.equals("ASCII Letters only!...") || text.equals("Requires name!...")) { // If term name is empty or a warning message
             resultMsg = "Requires name!...";
         }
 

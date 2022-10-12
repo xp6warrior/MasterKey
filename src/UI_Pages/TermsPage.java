@@ -23,18 +23,18 @@ public class TermsPage {
 
         JComponentArray components = new JComponentArray(new JComponent[]{title, scrollField}, new JComponent[]{add, remove, back});
 
-        // Buttons
-        add.addActionListener(e -> scrollField.add(new TermField()));
-        remove.addActionListener(e -> scrollField.delete(false));
-        back.addActionListener(e -> {
+        // Button functionality
+        add.addActionListener(e -> scrollField.add(new TermField())); // Adds new TermField to the ScrollField
+        remove.addActionListener(e -> scrollField.delete(false)); // Deletes selected TermFields from ScrollField
+        back.addActionListener(e -> { // Switches back to main menu and saves changes to terms
             frame.setPage(Frame.MENU);
             UserData.saveToTerms();
         });
 
-        // Adding
+        // Renders all components onto the Frame
         frame.add(components);
 
-        // Load terms
+        // Loads list of existing terms for changing (displays them as Fields)
         for (Term term: UserData.loadFromTerms()) {
             Field field = new Field(CommonAssets.fieldSize, true);
             field.setText(term.getName());

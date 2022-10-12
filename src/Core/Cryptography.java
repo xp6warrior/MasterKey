@@ -18,7 +18,6 @@ public abstract class Cryptography {
     }
 
     public static String doCryptography(String phrase, int cryptType) {
-
         // Adds bytes to key until 16 bytes (characters)
         if (key.length() < 16) {
             addMissingBytes();

@@ -21,16 +21,30 @@ public abstract class UserData {
         String homeDir = System.getProperty("user.home");
         String os = System.getProperty("os.name").toLowerCase();
         File directory;
+        File pass;
+        File terms;
 
         if (os.contains("win")) {
             directory = new File(homeDir + "\\Documents\\" + MasterKey.name);
+            pass = new File(directory.getPath() + "\\Passwords.txt");
+            terms = new File(directory.getPath() + "\\Terms.txt");
         } else if (os.contains("mac")) {
             directory = new File(homeDir + "/Documents/" + MasterKey.name);
+            pass = new File(directory.getPath() + "/Passwords.txt");
+            terms = new File(directory.getPath() + "/Terms.txt");
         } else {
             directory = new File("./" + MasterKey.name);
+            pass = new File("./" + MasterKey.name + "/Passwords.txt");
+            terms = new File("./" + MasterKey.name + "/Terms.txt");
         }
         if (!directory.exists()) {
             directory.mkdir();
+        }
+        if (!pass.exists()) {
+            try {pass.createNewFile();} catch (IOException e) {e.printStackTrace();}
+        }
+        if (!terms.exists()) {
+            try {terms.createNewFile();} catch (IOException e) {e.printStackTrace();}
         }
         path = directory.getPath();
     }
