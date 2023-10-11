@@ -1,0 +1,15 @@
+TODO
+
+1. Rework the file system
+    - Use something other than .txt files for storing data
+    - Incorporate a "password test" file specifically for checking correct password (using cryptography method)
+
+2. Rework UI
+    - Switch to a different UI library (JavaFX)
+    - Add login page
+    - Redo remaining pages
+
+3. Incorporate functionality for new content
+    - Buttons on pages
+
+4. Touch up on old code
